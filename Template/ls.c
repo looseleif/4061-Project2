@@ -13,7 +13,7 @@ void ls(char *path, bool recurse_flag) {
     		mydir = opendir(path);
     		while((directory = readdir(mydir)) != NULL)
     		{
-        		printf(" %d\n", (char)directory>path);
+        		printf(" %s\n", directory->path);
     		}
     		closedir(mydir);
 	}
