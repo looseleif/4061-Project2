@@ -9,12 +9,18 @@ void ls(char *path, bool recurse_flag) {
 	DIR *mydir;
     	struct dirent *directory;
 
+	printf("before \n");
+	
 	if(path != NULL) {
+		printf("inside \n");
     		mydir = opendir(path);
     		while((directory = readdir(mydir)) != NULL)
-    		{
+    		{	
+			printf("While loop \n");
         		printf(" %s\n", directory->d_name);
     		}
+		
+		printf("done \n);
     		closedir(mydir);
 	}
 }
