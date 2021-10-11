@@ -20,7 +20,7 @@ void ls(char *path, bool recurse_flag) {
         		printf(" %s\n", directory->d_name);
     		}
 		
-		printf("done \n);
+		printf("done \n");
     		closedir(mydir);
 	}
 }
