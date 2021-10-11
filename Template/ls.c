@@ -9,7 +9,7 @@ void ls(char *path, bool recurse_flag) {
 	DIR *mydir;
     	struct dirent *directory;
 
-	printf("before %c\n", path);
+	printf("before %s\n", path);
 	
 	if(path != NULL) {
 		printf("inside \n");
