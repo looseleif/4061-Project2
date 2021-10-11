@@ -3,9 +3,20 @@
 #include <unistd.h>
 #include<string.h>
 #include <stdbool.h>
+#include <dirent.h>
 
 void ls(char *path, bool recurse_flag) {
-	/* Insert code here*/
+	DIR *mydir;
+    	struct dirent *directory;
+
+	if(path != NULL) {
+    		mydir = opendir(path);
+    		while((directory = readdir(mydir)) != NULL)
+    		{
+        		printf(" %s\n", directory>path);
+    		}
+    		closedir(mydir);
+	}
 }
 
 int main(int argc, char *argv[]){
