@@ -28,7 +28,8 @@ void ls(char *path, bool recurse_flag) {
 	
 	
 
-	if(path != NULL) { 
+	if(recurse_flag == false) 
+	{ 
     		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
 
 		//readdir returns a pointer to the current position in the directory
@@ -47,6 +48,39 @@ void ls(char *path, bool recurse_flag) {
 		printf("\n"); //Formatting
 		
     		closedir(mydir);
+	}
+	else if(recurse_flag == true)
+	{
+		int isFolder = 0;
+		
+		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
+
+		//readdir returns a pointer to the current position in the directory
+    		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
+    		{	
+			if(excludePeriods < 2) 
+			{
+				excludePeriods++;
+			}
+			else
+			{	
+				if(directory -> d_type == DT_NIR) //This checks if it is a folder
+				{
+					isFolder++;
+					printf(directory + "\n");
+					printf(mydir + "\n");
+					
+				}
+        			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
+			}
+    		}
+		
+		printf("\n"); //Formatting
+		
+    		closedir(mydir);
+		
+		
+		
 	}
 }
 
