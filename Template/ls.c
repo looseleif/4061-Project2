@@ -64,11 +64,11 @@ void ls(char *path, bool recurse_flag) {
 			}
 			else
 			{	
-				if(directory -> d_type == DT_NIR) //This checks if it is a folder
+				if(directory -> d_type == DT_DIR) //This checks if it is a folder
 				{
 					isFolder++;
-					printf(directory + "\n");
-					printf(mydir + "\n");
+					printf("directory: %s\n", directory);
+					printf("mydir: %s\n", mydir);
 					
 				}
         			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
