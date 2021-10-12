@@ -23,9 +23,11 @@ void ls(char *path, bool recurse_flag) {
 		
     		closedir(mydir);
 	}
-	else if(path = NULL) {
+	else if(path == NULL) {
 		int Max_Path_Size = 20; //Just a random number I picked
 		char curDir[Max_Path_Size]; //array that will represent our current directory
+
+		printf("in the null\n");
 		
 		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
 		{
@@ -33,6 +35,7 @@ void ls(char *path, bool recurse_flag) {
 		}
 		else //This code is copy and paste from above, may reformat to make more efficient
 		{
+			printf("In the else\n");
 			path = curDir; 
 
 			mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
