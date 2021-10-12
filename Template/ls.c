@@ -10,7 +10,23 @@ void ls(char *path, bool recurse_flag) {
     	struct dirent *directory; //A variable that represents the directory as a whole
 
 	int excludePeriods = 0;
-
+	
+	if(path == NULL)
+	{
+		size_t Max_Path_Size = 100; //Just a random number I picked
+		char curDir[Max_Path_Size]; //array that will represent our current directory
+		
+		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
+		{
+			printf("CWD Error %s\n", curDir);
+		}
+		else //This code is copy and paste from above, may reformat to make more efficient
+		{
+			path = curDir; 
+		}
+	}
+	
+	
 
 	if(path != NULL) { 
     		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
@@ -31,39 +47,6 @@ void ls(char *path, bool recurse_flag) {
 		printf("\n"); //Formatting
 		
     		closedir(mydir);
-	}
-	else if(path == NULL) {
-		size_t Max_Path_Size = 100; //Just a random number I picked
-		char curDir[Max_Path_Size]; //array that will represent our current directory
-		
-		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
-		{
-			printf("CWD Error %s\n", curDir);
-		}
-		else //This code is copy and paste from above, may reformat to make more efficient
-		{
-			path = curDir; 
-
-			mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
-
-			//readdir returns a pointer to the current position in the directory
-    			while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
-    			{	
-				if(excludePeriods < 2) 
-				{
-					excludePeriods++;
-				}
-				else
-				{
-        				printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
-				}
-    			}
-		
-			printf("\n"); //Formatting
-		
-    			closedir(mydir);
-		}
-		
 	}
 }
 
