@@ -85,6 +85,8 @@ void ls(char *path, bool recurse_flag) {
 					printf("path: %s\n", path);
 					printf("mydir: %s\n", newPath);
 					
+					free(newPath);
+					
 				}
         			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
 			}
