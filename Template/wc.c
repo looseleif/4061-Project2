@@ -8,6 +8,8 @@ void wc(int mode, char* path){
 	/*insert code here*/
 
 	// chase was here
+
+	// change made to main branch...
 }
 
 int main(int argc, char** argv){
