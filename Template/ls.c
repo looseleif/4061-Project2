@@ -24,7 +24,7 @@ void ls(char *path, bool recurse_flag) {
     		closedir(mydir);
 	}
 	else if(path == NULL) {
-		int Max_Path_Size = 20; //Just a random number I picked
+		size_t Max_Path_Size = 100; //Just a random number I picked
 		char curDir[Max_Path_Size]; //array that will represent our current directory
 
 		printf("in the null\n");
