@@ -8,6 +8,11 @@ void wc(int mode, char* path){
 	/*insert code here*/
 
 	// chase was here
+<<<<<<< Updated upstream
+=======
+
+	// change made to chase branch to be merged
+>>>>>>> Stashed changes
 }
 
 int main(int argc, char** argv){
