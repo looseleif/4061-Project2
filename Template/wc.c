@@ -9,7 +9,7 @@ void wc(int mode, char* path){
 
 	// chase was here
 
-	// change made to main branch...
+	// change made to chase branch to be merged
 }
 
 int main(int argc, char** argv){
