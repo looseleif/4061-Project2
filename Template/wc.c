@@ -4,12 +4,14 @@
 #include<string.h>
 
 void wc(int mode, char* path){
+	
 	/*Feel free to change the templates as needed*/
 	/*insert code here*/
 
 	// chase was here
 
 	// change made to chase branch to be merged
+
 }
 
 int main(int argc, char** argv){
