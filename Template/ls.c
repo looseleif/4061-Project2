@@ -31,7 +31,7 @@ void ls(char *path, bool recurse_flag) {
 		
 		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
 		{
-			printf("CWD Error\n");
+			printf("CWD Error %s\n", curDir);
 		}
 		else //This code is copy and paste from above, may reformat to make more efficient
 		{
