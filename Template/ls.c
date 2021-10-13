@@ -105,7 +105,7 @@ void ls(char *path, bool recurse_flag) {
 			}
 		}
 		
-		printf("\n"); //Formatting
+		printf("LOL\n"); //Formatting
 		
     		closedir(mydir);
 		
