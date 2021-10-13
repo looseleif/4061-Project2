@@ -6,7 +6,7 @@
 #include <dirent.h>
 
 char *recursiveDirectoryStorage[5];
-int currentDirStorInt = 0;
+//int currentDirStorInt = 0;
 
 
 void ls(char *path, bool recurse_flag) {
@@ -14,6 +14,8 @@ void ls(char *path, bool recurse_flag) {
     	struct dirent *directory; //A variable that represents the directory as a whole
 
 	int excludePeriods = 0;
+
+	int currentDirStorInt = 0;
 	
 	if(path == NULL)
 	{
@@ -82,11 +84,13 @@ void ls(char *path, bool recurse_flag) {
 			}
     		}
 		
-		
-		for(int i = 0; i < currentDirStorInt; i++)
-		{
-			printf("%s: \n", recursiveDirectoryStorage[i]);
-			ls(recursiveDirectoryStorage[i], true);
+		if(currentDirStorInt != 0){
+			for(int i = 0; i < currentDirStorInt; i++)
+			{
+				printf("%s: \n", recursiveDirectoryStorage[i]);
+				ls(recursiveDirectoryStorage[i], true);
+
+			}
 		}
 		
 		printf("\n"); //Formatting
