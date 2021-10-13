@@ -90,7 +90,7 @@ void ls(char *path, bool recurse_flag) {
 					{
 						recursiveDirectoryStorage[currentDirStorInt] = (char*) malloc(strlen(directory->d_name)+1);
 						strncpy(recursiveDirectoryStorage[currentDirStorInt], directory->d_name, strlen(directory->d_name));
-						printf("%s\n", recursiveDirectoryStorage[currentDirStorInt]);
+						printf("HAHAH: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
 
 						//recursiveDirectoryStorage[currentDirStorInt] = opendir(mydir + directory ->d_name);
 						//currentDirStorInt++;
