@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <dirent.h>
 
-char recursiveDirectoryStorage[5];
+char *recursiveDirectoryStorage[5];
 int currentDirStorInt = 0;
 
 
