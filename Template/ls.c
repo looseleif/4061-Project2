@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <dirent.h>
 
-char *recursiveDirectoryStorage[5];
+char *recursiveDirectoryStorage[500];
 //int currentDirStorInt = 0;
 
 
@@ -63,9 +63,12 @@ void ls(char *path, bool recurse_flag) {
 		
 		//printf("PATH: \n"); //Formatting
 
+		printf("a \n");
+
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
     		{	
+			printf("b \n");
 			if(excludePeriods < 2) 
 			{
 				excludePeriods++;
@@ -83,7 +86,7 @@ void ls(char *path, bool recurse_flag) {
 				
 			}
     		} printf("abc %d \n", currentDirStorInt);
-		
+		printf("c \n");
 		if(currentDirStorInt != 0){
 			for(int i = 0; i < currentDirStorInt; i++)
 			{
