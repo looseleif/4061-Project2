@@ -5,11 +5,13 @@
 #include <stdbool.h>
 #include <dirent.h>
 
+char recursiveDirectoryStorage[5];
+int currentDirStorInt = 0;
+
+
 void ls(char *path, bool recurse_flag) {
 	DIR *mydir; //DIR is a type that represents the directory
     	struct dirent *directory; //A variable that represents the directory as a whole
-
-	int test = 0;
 
 	int excludePeriods = 0;
 	
@@ -57,7 +59,7 @@ void ls(char *path, bool recurse_flag) {
 		//so don't do it
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
 		
-		printf("PATH: %d\n", test); //Formatting
+		printf("PATH: \n"); //Formatting
 
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
@@ -70,13 +72,22 @@ void ls(char *path, bool recurse_flag) {
 			{	
 				if(directory -> d_type == DT_DIR) //This checks if it is a folder
 				{
-					test = 1;
-					printf("in the while %d \n", test);
-					ls(directory -> d_name, true);
+					recursiveDirectoryStorage[currentDirStorInt] = directory -> d_name;
+					currentDirStorInt++;
+					//ls(directory -> d_name, true);
 				}
         			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
+				
+				
 			}
     		}
+		
+		
+		for(int i = 0; i < currentDirStorInt; i++)
+		{
+			printf("%s: \n", recursiveDirectoryStorage[i]");
+			ls(recursiveDirectoryStorage[i], true);
+		}
 		
 		printf("\n"); //Formatting
 		
