@@ -95,8 +95,8 @@ void ls(char *path, bool recurse_flag) {
 
 						printf("HAHAH: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
 						
-						//recursiveDirectoryStorage[currentDirStorInt] = opendir(mydir + directory ->d_name);
-						//currentDirStorInt++;
+						//recursiveDirectoryStorage[currentDirStorInt] = directory ->d_name;
+						currentDirStorInt++;
 						//ls(directory -> d_name, true);
 					}
 					printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
@@ -107,12 +107,12 @@ void ls(char *path, bool recurse_flag) {
 
 			printf("\n");
 
-				for (int i = 0; i < currentDirStorInt; i++)
-				{
-					printf("%s: \n", recursiveDirectoryStorage[i]);
-					ls(recursiveDirectoryStorage[i], true);
+			for (int i = 0; i < currentDirStorInt; i++)
+			{
+				printf("%s: \n", recursiveDirectoryStorage[i]);
+				ls(recursiveDirectoryStorage[i], true);
 
-				}
+			}
 
 		}
 		for (int i = 0; i < currentDirStorInt; i++)
