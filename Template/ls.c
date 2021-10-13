@@ -51,31 +51,25 @@ void ls(char *path, bool recurse_flag) {
 	}
 	else if(recurse_flag == true)
 	{
-		
-		//printf("PATH: \n"); //Formatting
-		
+		//for some reason putting a printf statement before this mydir line will cause a seg fault
+		//so don't do it
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
 		
 		printf("PATH: \n"); //Formatting
-		
-		printf("BEFORE WHILE\n");
 
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
     		{	
-			printf("IN WHILE\n");
 			if(excludePeriods < 2) 
 			{
 				excludePeriods++;
 			}
 			else
 			{	
-				printf("IN ELSE\n");
 				if(directory -> d_type == DT_DIR) //This checks if it is a folder
 				{
-					printf("WE MADE IT\n");
 					
-					//ls(directory -> d_name, false);
+					ls(directory -> d_name, false);
 				}
         			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
 			}
