@@ -112,7 +112,10 @@ void ls(char *path, bool recurse_flag) {
 				}
 
 		}
-		free(recursiveDirectoryStorage);
+		for (int i = 0; i < currentDirStorInt; i++)
+		{
+			free(recursiveDirectoryStorage[i]);
+		}
     		closedir(mydir);
 
 	}
