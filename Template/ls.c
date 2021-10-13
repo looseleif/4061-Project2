@@ -5,7 +5,7 @@
 #include <stdbool.h>
 #include <dirent.h>
 
-char *recursiveDirectoryStorage[500];
+char *recursiveDirectoryStorage[100];
 //int currentDirStorInt = 0;
 
 
@@ -31,8 +31,6 @@ void ls(char *path, bool recurse_flag) {
 			path = curDir; 
 		}
 	}
-	
-	//printf("test1 \n");
 
 	if(recurse_flag == false) 
 	{ 
@@ -105,12 +103,8 @@ void ls(char *path, bool recurse_flag) {
 			}
 		}
 		
-		printf("LOL\n"); //Formatting
-		
     		closedir(mydir);
-		
-		
-		
+
 	}
 }
 
