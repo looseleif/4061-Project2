@@ -51,9 +51,8 @@ void ls(char *path, bool recurse_flag) {
 	}
 	else if(recurse_flag == true)
 	{
-		int isFolder = 0;
 		
-		printf(".: \n"); //Formatting
+		//printf(".: \n"); //Formatting
 		
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
 
