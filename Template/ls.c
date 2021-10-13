@@ -63,43 +63,45 @@ void ls(char *path, bool recurse_flag) {
 		
 		if (mydir == NULL) {
 
-			printf("ERROR \n");
-			exit(1);
+			printf("EOD \n");
+			
 		}
+		else {
 
-		//printf("PATH: \n"); //Formatting
+			//printf("PATH: \n"); //Formatting
 
-		printf("a \n");
+			printf("a \n");
 
-		//readdir returns a pointer to the current position in the directory
-    		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
-    		{	
-			printf("b \n");
-			if(excludePeriods < 2) 
+			//readdir returns a pointer to the current position in the directory
+			while ((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
 			{
-				excludePeriods++;
-			}
-			else
-			{	
-				if(directory -> d_type == DT_DIR) //This checks if it is a folder
+				printf("b \n");
+				if (excludePeriods < 2)
 				{
-					recursiveDirectoryStorage[currentDirStorInt] = directory -> d_name;
-					currentDirStorInt++;
-					//ls(directory -> d_name, true);
+					excludePeriods++;
 				}
-        			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
-				
-				
-			}
-    		} printf("abc %d \n", currentDirStorInt);
-		printf("c \n");
-		if(currentDirStorInt != 0)
-		{
-			for(int i = 0; i < currentDirStorInt; i++)
-			{
-				printf("%s: \n", recursiveDirectoryStorage[i]);
-				ls(recursiveDirectoryStorage[i], true);
+				else
+				{
+					if (directory->d_type == DT_DIR) //This checks if it is a folder
+					{
+						recursiveDirectoryStorage[currentDirStorInt] = directory->d_name;
+						currentDirStorInt++;
+						//ls(directory -> d_name, true);
+					}
+					printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
 
+
+				}
+			} printf("abc %d \n", currentDirStorInt);
+			printf("c \n");
+			if (currentDirStorInt != 0)
+			{
+				for (int i = 0; i < currentDirStorInt; i++)
+				{
+					printf("%s: \n", recursiveDirectoryStorage[i]);
+					ls(recursiveDirectoryStorage[i], true);
+
+				}
 			}
 		}
 		
