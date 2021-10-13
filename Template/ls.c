@@ -5,11 +5,14 @@
 #include <stdbool.h>
 #include <dirent.h>
 
-char *recursiveDirectoryStorage[100];
+
 //int currentDirStorInt = 0;
 
 
 void ls(char *path, bool recurse_flag) {
+	
+	char* recursiveDirectoryStorage[100];
+	
 	DIR *mydir; //DIR is a type that represents the directory
     	struct dirent *directory; //A variable that represents the directory as a whole
 
@@ -92,15 +95,13 @@ void ls(char *path, bool recurse_flag) {
 
 			printf("\n");
 
-			//if (currentDirStorInt != 0)
-			//{
 				for (int i = 0; i < currentDirStorInt; i++)
 				{
 					printf("%s: \n", recursiveDirectoryStorage[i]);
 					ls(recursiveDirectoryStorage[i], true);
 
 				}
-			//}
+
 		}
 		
     		closedir(mydir);
