@@ -63,7 +63,7 @@ void ls(char *path, bool recurse_flag) {
 		
 		//printf("PATH: \n"); //Formatting
 
-		printf("a \n");
+		//printf("a \n");
 
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
