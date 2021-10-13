@@ -60,15 +60,17 @@ void ls(char *path, bool recurse_flag) {
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
     		{	
+			printf("IN WHILE\n");
 			if(excludePeriods < 2) 
 			{
 				excludePeriods++;
 			}
 			else
 			{	
+				printf("IN ELSE\n");
 				if(directory -> d_type == DT_DIR) //This checks if it is a folder
 				{
-					printf("WE MADE IT");
+					printf("WE MADE IT\n");
 					
 					ls(directory -> d_name, false);
 				}
