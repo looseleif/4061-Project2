@@ -69,7 +69,7 @@ void ls(char *path, bool recurse_flag) {
 				if(directory -> d_type == DT_DIR) //This checks if it is a folder
 				{
 					
-					ls(directory -> d_name, false);
+					ls(directory -> d_name, true);
 				}
         			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
 			}
