@@ -107,7 +107,7 @@ void ls(char *path, bool recurse_flag) {
 
 			for (int i = 0; i < currentDirStorInt; i++)
 			{
-				printf("%s: \n", recursiveDirectoryStorage);
+				//printf("%s: \n", recursiveDirectoryStorage);
 				ls(recursiveDirectoryStorage, true);
 
 			}
