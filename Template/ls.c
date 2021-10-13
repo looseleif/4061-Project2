@@ -88,8 +88,12 @@ void ls(char *path, bool recurse_flag) {
 				{
 					if (directory->d_type == DT_DIR) //This checks if it is a folder
 					{
-						recursiveDirectoryStorage[currentDirStorInt] = opendir(mydir + directory ->d_name);
-						currentDirStorInt++;
+						recursiveDirectoryStorage[currentDirStorInt] = (char*) malloc(strlen(directory->d_name)+1);
+						strncpy(recursiveDirectoryStorage[currentDirStorInt], directory->d_name, strlen(directory->d_name));
+
+
+						//recursiveDirectoryStorage[currentDirStorInt] = opendir(mydir + directory ->d_name);
+						//currentDirStorInt++;
 						//ls(directory -> d_name, true);
 					}
 					printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
@@ -108,7 +112,7 @@ void ls(char *path, bool recurse_flag) {
 				}
 
 		}
-		
+		free(recursiveDirectoryStorage);
     		closedir(mydir);
 
 	}
