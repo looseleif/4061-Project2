@@ -89,10 +89,10 @@ void ls(char *path, bool recurse_flag) {
 				{
 					if (directory->d_type == DT_DIR) //This checks if it is a folder
 					{
-						recursiveDirectoryStorage[currentDirStorInt] = mydir;
-						strncat(recursiveDirectoryStorage[currentDirStorInt], directory->d_name, strlen(directory->d_name));
-						
-						printf("HAHAH: %s\n", directory);
+						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
+						//strncat(recursiveDirectoryStorage[currentDirStorInt], directory->d_name, strlen(directory->d_name));
+						realpath(directory->d_name, recursiveDirectoryStorage[currentDirStorInt]);
+						printf("HAHAH: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
 						
 						currentDirStorInt++;
 						//ls(directory -> d_name, true);
