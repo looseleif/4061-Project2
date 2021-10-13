@@ -61,6 +61,12 @@ void ls(char *path, bool recurse_flag) {
 		//so don't do it
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
 		
+		if (mydir == NULL) {
+
+			printf("ERROR \n");
+			exit(1);
+		}
+
 		//printf("PATH: \n"); //Formatting
 
 		printf("a \n");
