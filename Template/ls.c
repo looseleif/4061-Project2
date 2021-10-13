@@ -32,7 +32,7 @@ void ls(char *path, bool recurse_flag) {
 		}
 	}
 	
-	printf("test1 \n");
+	//printf("test1 \n");
 
 	if(recurse_flag == false) 
 	{ 
