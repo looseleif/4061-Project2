@@ -60,8 +60,13 @@ void ls(char *path, bool recurse_flag) {
 	{
 		//for some reason putting a printf statement before this mydir line will cause a seg fault
 		//so don't do it
+
+		
+
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
 		
+		printf("%s\n", path);
+
 		if (mydir == NULL) {
 
 			printf("End of Directory Train \n");
