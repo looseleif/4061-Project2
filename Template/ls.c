@@ -55,7 +55,9 @@ void ls(char *path, bool recurse_flag) {
 		//printf("PATH: \n"); //Formatting
 		
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
-
+		
+		printf("PATH: \n"); //Formatting
+		
 		printf("BEFORE WHILE\n");
 
 		//readdir returns a pointer to the current position in the directory
