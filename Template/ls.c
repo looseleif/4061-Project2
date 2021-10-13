@@ -70,23 +70,7 @@ void ls(char *path, bool recurse_flag) {
 				{
 					isFolder++;
 					
-					//char curPath = path;
-					char name = directory -> d_name;
-
-					size_t lenPath = strlen(path);
-					size_t lenNewPath = strlen(name);
-
-					char * newPath = malloc(lenPath + lenNewPath + 1);
-					
-					strcpy(newPath,path);
-					newPath[lenPath] = name;
-					newPath[lenPath + 1] = '\0';
-					
-					printf("path: %s\n", path);
-					printf("mydir: %s\n", newPath);
-					
-					free(newPath);
-					
+					ls(directory -> d_type, false);
 				}
         			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
 			}
