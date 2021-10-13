@@ -36,7 +36,7 @@ void ls(char *path, bool recurse_flag) {
 
 	if(recurse_flag == false) 
 	{ 
-    		mydir = opendir("."); //This sets mydir equal to a pointer to the specified path
+    		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
 
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
@@ -59,7 +59,7 @@ void ls(char *path, bool recurse_flag) {
 	{
 		//for some reason putting a printf statement before this mydir line will cause a seg fault
 		//so don't do it
-		mydir = opendir("."); //This sets mydir equal to a pointer to the specified path
+		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
 		
 		//printf("PATH: \n"); //Formatting
 
