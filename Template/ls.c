@@ -11,7 +11,7 @@
 
 void ls(char *path, bool recurse_flag) {
 	
-	char* recursiveDirectoryStorage[100];
+	DIR* recursiveDirectoryStorage[100];
 	
 	DIR *mydir; //DIR is a type that represents the directory
     	struct dirent *directory; //A variable that represents the directory as a whole
