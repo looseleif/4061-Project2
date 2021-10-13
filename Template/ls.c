@@ -4,6 +4,7 @@
 #include<string.h>
 #include <stdbool.h>
 #include <dirent.h>
+#include <cwalk.h>
 
 
 //int currentDirStorInt = 0;
@@ -91,8 +92,8 @@ void ls(char *path, bool recurse_flag) {
 						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
 						//strncat(recursiveDirectoryStorage[currentDirStorInt], directory->d_name, strlen(directory->d_name));
 						
-						cwk_path_get_absolute(path, directory->d_name, recursiveDirectoryStorage[currentDirStorInt], sizeof(recursiveDirectoryStorage));
-						printf("HAHAH: %s\n", recursiveDirectoryStorage);
+						cwk_path_get_absolute(mydir, directory->d_name, recursiveDirectoryStorage[currentDirStorInt], sizeof(recursiveDirectoryStorage));
+						printf("HAHAH: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
 						
 						currentDirStorInt++;
 						//ls(directory -> d_name, true);
