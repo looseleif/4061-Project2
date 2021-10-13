@@ -57,6 +57,8 @@ void ls(char *path, bool recurse_flag) {
 		
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
 
+		printf("BEFORE WHILE\n");
+
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
     		{	
