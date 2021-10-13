@@ -11,7 +11,7 @@
 
 void ls(char *path, bool recurse_flag) {
 	
-	DIR* recursiveDirectoryStorage[100];
+	char* recursiveDirectoryStorage[100];
 	
 	DIR *mydir; //DIR is a type that represents the directory
     	struct dirent *directory; //A variable that represents the directory as a whole
@@ -88,11 +88,11 @@ void ls(char *path, bool recurse_flag) {
 				{
 					if (directory->d_type == DT_DIR) //This checks if it is a folder
 					{
-						recursiveDirectoryStorage[currentDirStorInt] = mydir;
-						strncat(recursiveDirectoryStorage[currentDirStorInt], directory->d_name, strlen(directory->d_name));
+						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
+						//strncat(recursiveDirectoryStorage[currentDirStorInt], directory->d_name, strlen(directory->d_name));
 						
-
-						printf("HAHAH: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
+						cwk_path_get_absolute(path, directory->d_name, recursiveDirectoryStorage[currentDirStorInt], sizeof(recursiveDirectoryStorage));
+						printf("HAHAH: %s\n", recursiveDirectoryStorage);
 						
 						currentDirStorInt++;
 						//ls(directory -> d_name, true);
