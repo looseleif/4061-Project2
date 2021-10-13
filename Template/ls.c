@@ -88,7 +88,7 @@ void ls(char *path, bool recurse_flag) {
 				{
 					if (directory->d_type == DT_DIR) //This checks if it is a folder
 					{
-						recursiveDirectoryStorage[currentDirStorInt] = opendir(directory ->d_name);
+						recursiveDirectoryStorage[currentDirStorInt] = opendir(mydir + directory ->d_name);
 						currentDirStorInt++;
 						//ls(directory -> d_name, true);
 					}
