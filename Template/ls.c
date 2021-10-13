@@ -61,7 +61,7 @@ void ls(char *path, bool recurse_flag) {
 		//so don't do it
 		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path
 		
-		printf("PATH: \n"); //Formatting
+		//printf("PATH: \n"); //Formatting
 
 		//readdir returns a pointer to the current position in the directory
     		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
@@ -82,7 +82,7 @@ void ls(char *path, bool recurse_flag) {
 				
 				
 			}
-    		} printf("\n");
+    		} printf("abc %d \n", currentDirStorInt);
 		
 		if(currentDirStorInt != 0){
 			for(int i = 0; i < currentDirStorInt; i++)
