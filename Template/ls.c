@@ -5,6 +5,8 @@
 #include <stdbool.h>
 #include <dirent.h>
 #include <cwalk.h>
+#include <stddef.h>
+
 
 
 //int currentDirStorInt = 0;
