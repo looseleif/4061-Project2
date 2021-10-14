@@ -92,7 +92,7 @@ void ls(char *path, bool recurse_flag) {
 						printf("HAHAH: %s\n", mydir);
 						if(mydir == path)
 							printf("yes");
-						sprintf(mydir, directory->d_name);
+						sprintf(mydir, "/", directory->d_name);
 						recursiveDirectoryStorage[currentDirStorInt] = mydir;
 						printf("HAHAH: %s\n", mydir);
 						
