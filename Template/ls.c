@@ -12,7 +12,7 @@
 
 void ls(char *path, bool recurse_flag) {
 	
-	char recursiveDirectoryStorage[1000];
+	char recursiveDirectoryStorage[1000][1000];
 	
 	DIR *mydir; //DIR is a type that represents the directory
     	struct dirent *directory; //A variable that represents the directory as a whole
@@ -89,11 +89,10 @@ void ls(char *path, bool recurse_flag) {
 				{
 					if (directory->d_type == DT_DIR) //This checks if it is a folder
 					{
-						//printf("HAHAH: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
-						realpath(directory->d_name, recursiveDirectoryStorage[currentDirStorInt]);
-						//sprintf(recursiveDirectoryStorage, "%s/%s", mydir,directory->d_name);
+						//printf("before: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
+						sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", mydir,directory->d_name);
 						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
-						printf("HAHAH: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
+						printf("after: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
 						
 						currentDirStorInt++;
 						//ls(directory -> d_name, true);
