@@ -90,8 +90,6 @@ void ls(char *path, bool recurse_flag) {
 					if (directory->d_type == DT_DIR) //This checks if it is a folder
 					{
 						printf("HAHAH: %s\n", mydir);
-						if(mydir == path)
-							printf("yes");
 						sprintf(recursiveDirectoryStorage, "%s/%s", path,directory->d_name);
 						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
 						printf("HAHAH: %s\n", mydir);
