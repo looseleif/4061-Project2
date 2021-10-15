@@ -16,14 +16,7 @@ void ls(char *path, bool recurse_flag)
    	struct dirent *directoryPointer;
    	DIR *mydir;
 
-  	if ((mydir = opendir(path)) == NULL) 
-	{
-		printf("Can't open %s\n", path);
-      		return;
-   	}
-	
-	printf("In directory: %s\n", path);
-	
+
 	if(path == NULL)
 	{
 		size_t Max_Path_Size = 1000; //Just a random number I picked
@@ -40,6 +33,17 @@ void ls(char *path, bool recurse_flag)
 		}
 	}
 
+
+
+
+
+  	if ((mydir = opendir(path)) == NULL) 
+	{
+		printf("Can't open %s\n", path);
+      		return;
+   	}
+	
+	printf("In directory: %s\n", path);
 
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
