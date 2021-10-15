@@ -22,7 +22,7 @@ void ls(char *path, bool recurse_flag)
       		return;
    	}
 	
-	printf("In directory: %s", path);
+	printf("In directory: %s\n", path);
 	
    	while ((dp = readdir(dfd)) != NULL) 
 	{
