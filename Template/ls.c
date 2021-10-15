@@ -12,13 +12,13 @@
 
 void ls(char *path, bool recurse_flag) 
 {
-	char path[MAX_PATH];
+	char path1[2000];
    	struct dirent *dp;
    	DIR *dfd;
  
-  	if ((dfd = opendir(dir)) == NULL) 
+  	if ((dfd = opendir(path)) == NULL) 
 	{
-      		fprintf(stderr, "lsrec: can't open %s\n", dir);
+      		fprintf(stderr, "lsrec: can't open %s\n", path);
       		return;
    	}
  
@@ -30,11 +30,11 @@ void ls(char *path, bool recurse_flag)
          		if (strcmp(dp->d_name, ".") == 0 || 
              		strcmp(dp->d_name, "..") == 0)
             			continue;
-         		sprintf(path, "%s/%s", dir, dp->d_name);
-         		lsrec(path);
+         		sprintf(path1, "%s/%s", path, dp->d_name);
+         		ls(path1);
       		}
       		else
-         		printf("%s/%s\n", dir, dp->d_name);
+         		printf("%s/%s\n", path, dp->d_name);
       	}
    closedir(dfd);
 	
