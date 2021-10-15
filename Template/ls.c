@@ -68,7 +68,7 @@ void ls(char *path, bool recurse_flag) {
 		
 
 		if ((mydir = opendir(path)) == NULL) {
-      			printf("Can't open %s\n", dir);
+      			printf("Can't open %s\n", path);
       			return;
    		}
 		printf("Path is set to: %s\n", path);
