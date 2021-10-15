@@ -38,7 +38,7 @@ void ls(char *path, bool recurse_flag)
 
       		}
       		else
-         		printf("%s/%s\n", path, dp->d_name);
+         		printf("%s\n", dp->d_name);
       	}
 	//for(int i = 0; i < count; i++)
 	//{
