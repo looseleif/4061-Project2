@@ -42,13 +42,12 @@ void wc(int mode, char* path){
 
 	if (mode == 0) {
 
+
 		// printf("mode 0\n");
 
 		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
-			lineCount++;
-
-			if ( (buf[0] != ' ') && (buf[0] != '\n') && (buf[0] != '\r') ) {
+			if ( (buf[0] != ' ') && (buf[0] != '\r') ) {
 
 				wordCount++;
 
@@ -64,23 +63,27 @@ void wc(int mode, char* path){
 
 			while (read(fd[0], buf, sizeof(buf))) {
 
+				printf("prev:'%d' buf:'%d'\n", prev[0], buf[0]);
+
 				if (buf[0] == '\n') {
 
 					lineCount++;
 
 				}
 
-				if ((prev[0] != ' ' && buf[0] == ' ') || buf[0] == '\n' || buf[0] == '\t') {
+				if ((prev[0] != ' ' && buf[0] == ' ') || ((buf[0]!=32&&buf[0]!=10&&buf[0] != 13)&&prev[0]==10)) {
 
 					wordCount++;
 
 				}
 
-				if (buf[0] != 10 && buf[0] != 13 && buf[0] != 0) {
 
-					characterCount++;
 
-				}
+
+				characterCount++;
+
+
+
 
 				prev[0] = buf[0];
 
