@@ -15,7 +15,7 @@ void ls(char *path, bool recurse_flag)
 	char path1[2000];
    	struct dirent *dp;
    	DIR *dfd;
- 	printf("1\n");
+
   	if ((dfd = opendir(path)) == NULL) 
 	{
       		printf("1\n");
@@ -23,20 +23,19 @@ void ls(char *path, bool recurse_flag)
 		printf("1\n");
       		return;
    	}
- 	printf("2\n");
+
    	while ((dp = readdir(dfd)) != NULL) 
 	{
-      		printf("3\n");
 		if (dp->d_type == DT_DIR)
 		{
-         		printf("4\n");
+
 			path1[0] = '\0';
          		if (strcmp(dp->d_name, ".") == 0 || 
              		strcmp(dp->d_name, "..") == 0)
             			continue;
          		sprintf(path1, "%s/%s", path, dp->d_name);
          		ls(path1, true);
-			printf("5\n");
+
       		}
       		else
          		printf("%s/%s\n", path, dp->d_name);
