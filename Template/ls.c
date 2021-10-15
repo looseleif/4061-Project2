@@ -21,7 +21,9 @@ void ls(char *path, bool recurse_flag)
 		fprintf(stderr, "lsrec: can't open %s\n", path);
       		return;
    	}
-
+	
+	printf("In directory: %s", dfd);
+	
    	while ((dp = readdir(dfd)) != NULL) 
 	{
 		if (dp->d_type == DT_DIR)
