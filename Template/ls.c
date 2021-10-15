@@ -26,14 +26,14 @@ void ls(char *path, bool recurse_flag)
 	
 	if(path == NULL)
 	{
-		size_t Max_Path_Size = 100; //Just a random number I picked
+		size_t Max_Path_Size = 1000; //Just a random number I picked
 		char curDir[Max_Path_Size]; //array that will represent our current directory
 		
 		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
 		{
 			printf("CWD Error %s\n", curDir);
 		}
-		else //This code is copy and paste from above, may reformat to make more efficient
+		else 
 		{
 			path = curDir; 
 		}
