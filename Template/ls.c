@@ -44,18 +44,23 @@ void ls(char *path, bool recurse_flag)
 
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
-		if (directoryPointer->d_type == DT_DIR && recurse_flag == true)
+		if(excludePeriods < 2)
 		{
-         		if(excludePeriods < 2)
-			{
-            			excludePeriods++;
-			}
-			else
-			{
+			excludePeriods++;
+		}
+
+		else if (directoryPointer->d_type == DT_DIR && recurse_flag == true)
+		{
+         		//if(excludePeriods < 2)
+			//{
+            			//excludePeriods++;
+			//}
+			//else
+			//{
          			sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name);
          			ls(recursiveDirectoryStorage, true);
 				printf("Back in directory: %s\n", path);
-			}
+			//}
 
       		}
       		else
