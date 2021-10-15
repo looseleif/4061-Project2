@@ -15,20 +15,35 @@ void ls(char *path, bool recurse_flag)
 	char recursiveDirectoryStorage[2000];
    	struct dirent *directoryPointer;
    	DIR *mydir;
-	int count = 0;
+
   	if ((mydir = opendir(path)) == NULL) 
 	{
-		fprintf(stderr, "lsrec: can't open %s\n", path);
+		printf("Can't open %s\n", path);
       		return;
    	}
 	
 	printf("In directory: %s\n", path);
 	
+	if(path == NULL)
+	{
+		size_t Max_Path_Size = 100; //Just a random number I picked
+		char curDir[Max_Path_Size]; //array that will represent our current directory
+		
+		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
+		{
+			printf("CWD Error %s\n", curDir);
+		}
+		else //This code is copy and paste from above, may reformat to make more efficient
+		{
+			path = curDir; 
+		}
+	}
+
+
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
 		if (directoryPointer->d_type == DT_DIR)
 		{
-			count++;
 			recursiveDirectoryStorage[0] = '\0';
          		if (strcmp(directoryPointer->d_name, ".") == 0 || 
              		strcmp(directoryPointer->d_name, "..") == 0)
