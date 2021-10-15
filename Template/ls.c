@@ -25,10 +25,10 @@ void ls(char *path, bool recurse_flag)
 		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
 		{
 			printf("CWD Error %s\n", curDir);
+			return;
 		}
 		else 
 		{
-			printf("CWD Error %s\n", curDir);
 			path = curDir; 
 		}
 	}
@@ -49,7 +49,7 @@ void ls(char *path, bool recurse_flag)
 	{
 		if (directoryPointer->d_type == DT_DIR)
 		{
-			recursiveDirectoryStorage[0] = '\0';
+			//recursiveDirectoryStorage[0] = '\0';
          		if (strcmp(directoryPointer->d_name, ".") == 0 || 
              		strcmp(directoryPointer->d_name, "..") == 0)
             			continue;
