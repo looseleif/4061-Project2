@@ -15,9 +15,10 @@ void ls(char *path, bool recurse_flag)
 	char recursiveDirectoryStorage[2000];
    	struct dirent *directoryPointer;
    	DIR *mydir;
+	
+	int excludePeriods = 0;
 
-
-	if(path == NULL)
+	if(path == NULL) //gets the cwd and sets it equal to path
 	{
 		size_t Max_Path_Size = 1000; //Just a random number I picked
 		char curDir[Max_Path_Size]; //array that will represent our current directory
@@ -33,29 +34,28 @@ void ls(char *path, bool recurse_flag)
 		}
 	}
 
-
-
-
-
-  	if ((mydir = opendir(path)) == NULL) 
+  	if ((mydir = opendir(path)) == NULL) //error checking to see if the path is valid
 	{
 		printf("Can't open %s\n", path);
       		return;
    	}
 	
-	printf("In directory: %s\n", path);
+	printf("In directory: %s\n", path); //formatting
 
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
 		if (directoryPointer->d_type == DT_DIR)
 		{
-			//recursiveDirectoryStorage[0] = '\0';
-         		if (strcmp(directoryPointer->d_name, ".") == 0 || 
-             		strcmp(directoryPointer->d_name, "..") == 0)
-            			continue;
-         		sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name);
-         		ls(recursiveDirectoryStorage, true);
-			printf("Back in directory: %s\n", path);
+         		if(excludePeriods < 2)
+			{
+            			excludePeriods++;
+			}
+			else
+			{
+         			sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name);
+         			ls(recursiveDirectoryStorage, true);
+				printf("Back in directory: %s\n", path);
+			}
 
       		}
       		else
