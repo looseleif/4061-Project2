@@ -32,18 +32,18 @@ void ls(char *path, bool recurse_flag)
              		strcmp(dp->d_name, "..") == 0)
             			continue;
          		sprintf(path1, "%s/%s", path, dp->d_name);
-         		//ls(path1, true);
+         		ls(path1, true);
 
       		}
       		else
          		printf("%s/%s\n", path, dp->d_name);
       	}
-	for(int i = 0; i < count; i++)
-	{
-		printf("in directory %s: \n", path);
-		printf("The value of i: %d and count: %d \n", i, count);
-		ls(path1, true);
-	}
+	//for(int i = 0; i < count; i++)
+	//{
+		//printf("in directory %s: \n", path);
+		//printf("The value of i: %d and count: %d \n", i, count);
+		//ls(path1, true);
+	//}
    closedir(dfd);
 	
 }
