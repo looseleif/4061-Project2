@@ -44,7 +44,7 @@ void ls(char *path, bool recurse_flag)
 
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
-		if (directoryPointer->d_type == DT_DIR && recuse_flag == true)
+		if (directoryPointer->d_type == DT_DIR && recurse_flag == true)
 		{
          		if(excludePeriods < 2)
 			{
