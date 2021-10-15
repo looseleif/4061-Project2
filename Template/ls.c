@@ -12,11 +12,11 @@
 
 void ls(char *path, bool recurse_flag) 
 {
-	char path1[2000];
-   	struct dirent *dp;
-   	DIR *dfd;
+	char recursiveDirectoryStorage[2000];
+   	struct dirent *directoryPointer;
+   	DIR *mydir;
 	int count = 0;
-  	if ((dfd = opendir(path)) == NULL) 
+  	if ((mydir = opendir(path)) == NULL) 
 	{
 		fprintf(stderr, "lsrec: can't open %s\n", path);
       		return;
@@ -24,30 +24,25 @@ void ls(char *path, bool recurse_flag)
 	
 	printf("In directory: %s\n", path);
 	
-   	while ((dp = readdir(dfd)) != NULL) 
+   	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
-		if (dp->d_type == DT_DIR)
+		if (directoryPointer->d_type == DT_DIR)
 		{
 			count++;
-			path1[0] = '\0';
-         		if (strcmp(dp->d_name, ".") == 0 || 
-             		strcmp(dp->d_name, "..") == 0)
+			recursiveDirectoryStorage[0] = '\0';
+         		if (strcmp(directoryPointer->d_name, ".") == 0 || 
+             		strcmp(directoryPointer->d_name, "..") == 0)
             			continue;
-         		sprintf(path1, "%s/%s", path, dp->d_name);
-         		ls(path1, true);
+         		sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name);
+         		ls(recursiveDirectoryStorage, true);
 			printf("Back in directory: %s\n", path);
 
       		}
       		else
-         		printf("%s\n", dp->d_name);
+         		printf("%s\n", directoryPointer->d_name);
       	}
-	//for(int i = 0; i < count; i++)
-	//{
-		//printf("in directory %s: \n", path);
-		//printf("The value of i: %d and count: %d \n", i, count);
-		//ls(path1, true);
-	//}
-   closedir(dfd);
+
+   closedir(mydir);
 	
 }
 
