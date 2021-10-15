@@ -35,6 +35,7 @@ void ls(char *path, bool recurse_flag)
 		}
 		else 
 		{
+			printf("CWD Error %s\n", curDir);
 			path = curDir; 
 		}
 	}
