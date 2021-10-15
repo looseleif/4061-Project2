@@ -40,7 +40,7 @@ void ls(char *path, bool recurse_flag)
       	}
 	for(int i = 0; i < count; i++)
 	{
-		printf("in directory %s: \n", path1);
+		printf("in directory %s: \n", path);
 		ls(path1, true);
 	}
    closedir(dfd);
