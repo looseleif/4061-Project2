@@ -5,12 +5,20 @@
 #include <stdbool.h>
 #include <dirent.h>
 
+<<<<<<< Updated upstream
 
 
 //int currentDirStorInt = 0;
 
 
 void ls(char *path, bool recurse_flag) {
+=======
+void ls(char *path, bool recurse_flag) 
+{
+	char recursiveDirectoryStorage[2000];
+   	struct dirent *directoryPointer;
+   	DIR *mydir;
+>>>>>>> Stashed changes
 	
 	char recursiveDirectoryStorage[1000][1000];
 	
