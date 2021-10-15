@@ -64,8 +64,13 @@ void ls(char *path, bool recurse_flag) {
 
 		
 
-		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
+		//mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
 		
+
+		if ((mydir = opendir(path)) == NULL) {
+      			printf("Can't open %s\n", dir);
+      			return;
+   		}
 		printf("Path is set to: %s\n", path);
 
 		if (mydir == NULL) {
@@ -90,7 +95,6 @@ void ls(char *path, bool recurse_flag) {
 					if (directory->d_type == DT_DIR) //This checks if it is a folder
 					{
 						//printf("before: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
-						//recursiveDirectoryStorage[0] = '\0';
 						sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", path,directory->d_name);
 						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
 						printf("after: %s\n",  directory ->d_type);
