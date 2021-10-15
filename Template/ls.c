@@ -12,7 +12,7 @@
 
 void ls(char *path, bool recurse_flag) {
 	
-	char recursiveDirectoryStorage[1000];
+	char recursiveDirectoryStorage[1000][1000];
 	
 	DIR *mydir; //DIR is a type that represents the directory
     	struct dirent *directory; //A variable that represents the directory as a whole
@@ -93,7 +93,7 @@ void ls(char *path, bool recurse_flag) {
 						//recursiveDirectoryStorage[0] = '\0';
 						sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", path,directory->d_name);
 						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
-						printf("after: %s/%s\n", path, directory ->d_type);
+						printf("after: %s\n",  directory ->d_type);
 						
 						currentDirStorInt++;
 						//ls(directory -> d_name, true);
