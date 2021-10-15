@@ -35,6 +35,7 @@ void ls(char *path, bool recurse_flag)
             			continue;
          		sprintf(path1, "%s/%s", path, dp->d_name);
          		ls(path1, true);
+			printf("Back in directory: %s\n", path);
 
       		}
       		else
