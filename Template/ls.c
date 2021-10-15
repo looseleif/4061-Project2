@@ -31,7 +31,7 @@ void ls(char *path, bool recurse_flag)
              		strcmp(dp->d_name, "..") == 0)
             			continue;
          		sprintf(path1, "%s/%s", path, dp->d_name);
-         		ls(path1);
+         		ls(path1, true);
       		}
       		else
          		printf("%s/%s\n", path, dp->d_name);
