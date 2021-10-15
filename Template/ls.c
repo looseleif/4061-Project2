@@ -41,6 +41,7 @@ void ls(char *path, bool recurse_flag)
 	for(int i = 0; i < count; i++)
 	{
 		printf("in directory %s: \n", path);
+		printf("The value of i: %d and count: %d \n", i, count);
 		ls(path1, true);
 	}
    closedir(dfd);
