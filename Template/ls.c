@@ -18,7 +18,9 @@ void ls(char *path, bool recurse_flag)
  	printf("1\n");
   	if ((dfd = opendir(path)) == NULL) 
 	{
-      		fprintf(stderr, "lsrec: can't open %s\n", path);
+      		printf("1\n");
+		fprintf(stderr, "lsrec: can't open %s\n", path);
+		printf("1\n");
       		return;
    	}
  	printf("2\n");
