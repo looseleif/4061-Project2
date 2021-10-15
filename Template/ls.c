@@ -23,12 +23,12 @@ void ls(char *path, bool recurse_flag)
 		size_t Max_Path_Size = 1000; //Just a random number I picked
 		char curDir[Max_Path_Size]; //array that will represent our current directory
 		
-		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
+		if(getcwd(curDir, Max_Path_Size) == NULL) //Error checking
 		{
 			printf("CWD Error %s\n", curDir);
 			return;
 		}
-		else 
+		else //if no error, sets our current path to path
 		{
 			path = curDir; 
 		}
@@ -44,32 +44,24 @@ void ls(char *path, bool recurse_flag)
 
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
-		if(excludePeriods < 2)
+		if(excludePeriods < 2) //checking for the undesireable outputs
 		{
 			excludePeriods++;
 		}
-
+		//checks if we want to recurse and if it is a folder to enter into
 		else if (directoryPointer->d_type == DT_DIR && recurse_flag == true)
 		{
-         		//if(excludePeriods < 2)
-			//{
-            			//excludePeriods++;
-			//}
-			//else
-			//{
-         			sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name);
-         			ls(recursiveDirectoryStorage, true);
-				printf("Back in directory: %s\n", path);
-			//}
-
+         		sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name); //appends the path into the array
+         		ls(recursiveDirectoryStorage, true); //recurse.io
+			printf("Back in directory: %s\n", path); //makes the output easier to read
       		}
-      		else
+      		else //Outputs all file names
 		{
          		printf("%s\n", directoryPointer->d_name);
 		}
       	}
 
-   closedir(mydir);
+   closedir(mydir); //closes files
 	
 }
 
