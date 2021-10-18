@@ -12,19 +12,16 @@
 
 void ls(char *path, bool recurse_flag) 
 {
-	//printf("1\n");
 	char recursiveDirectoryStorage[200][200];
-
-	//char *recursiveDirectoryStorage = malloc(sizeof(char) * 2000);
 	
    	struct dirent *directoryPointer;
    	DIR *mydir;
-
+	
+	int n = 0;
+	
 	int currentDirStorInt = 0;
 	
 	int excludePeriods = 0;
-
-	//printf("2\n");
 	
 	if(path == NULL) //gets the cwd and sets it equal to path
 	{
@@ -42,21 +39,25 @@ void ls(char *path, bool recurse_flag)
 		}
 	}
 
-	//printf("3\n");
-	
   	if ((mydir = opendir(path)) == NULL) //error checking to see if the path is valid
 	{
 		printf("Can't open %s\n", path);
       		return;
    	}
 	
-	//printf("4\n");
-
-	printf("In directory: %s\n", path); //formatting
+	for ( const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
+        {
+       		++n;
+        }
+	
+	
+	
+	
+	
+	printf("In directory %d: %s\n", n, path); //formatting
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
-		//printf("5\n");
 		if(excludePeriods < 2) //checking for the undesireable outputs
 		{
 			excludePeriods++;
@@ -86,7 +87,6 @@ void ls(char *path, bool recurse_flag)
 	}
 
    closedir(mydir); //closes files
-   //free(recursiveDirectoryStorage);
 	
 }
 
