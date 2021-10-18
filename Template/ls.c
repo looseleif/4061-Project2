@@ -59,7 +59,7 @@ void ls(char *path, bool recurse_flag)
 		
 		if(i == n - 2)
 		{
-			s = '~' + p;
+			s = "~" + p;
 		}
 		else
 		{
