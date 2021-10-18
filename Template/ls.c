@@ -12,8 +12,11 @@
 
 void ls(char *path, bool recurse_flag) 
 {
-	printf("1\n");
+	//printf("1\n");
 	char recursiveDirectoryStorage[2000][2000];
+
+	recursiveDirectoryStorage = malloc(5*sizeof *recursiveDirectoryStorage);
+	
    	struct dirent *directoryPointer;
    	DIR *mydir;
 
@@ -21,7 +24,7 @@ void ls(char *path, bool recurse_flag)
 	
 	int excludePeriods = 0;
 
-	printf("1\n");
+	//printf("2\n");
 	
 	if(path == NULL) //gets the cwd and sets it equal to path
 	{
@@ -39,7 +42,7 @@ void ls(char *path, bool recurse_flag)
 		}
 	}
 
-	printf("1\n");
+	//printf("3\n");
 	
   	if ((mydir = opendir(path)) == NULL) //error checking to see if the path is valid
 	{
@@ -47,13 +50,13 @@ void ls(char *path, bool recurse_flag)
       		return;
    	}
 	
-	printf("1\n");
+	//printf("4\n");
 
 	printf("In directory: %s\n", path); //formatting
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
-		printf("2\n");
+		//printf("5\n");
 		if(excludePeriods < 2) //checking for the undesireable outputs
 		{
 			excludePeriods++;
@@ -76,12 +79,13 @@ void ls(char *path, bool recurse_flag)
 		
 	for (int i = 0; i < currentDirStorInt; i++)
 	{
-		printf("%s a : \n", recursiveDirectoryStorage[i]);
+		printf("%s: \n", recursiveDirectoryStorage[i]);
 		ls(recursiveDirectoryStorage[i], true);
 
 	}
 
    closedir(mydir); //closes files
+   free(recursiveDirectoryStorage);
 	
 }
 
