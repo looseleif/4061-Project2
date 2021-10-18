@@ -17,6 +17,9 @@ void ls(char *path, bool recurse_flag)
    	struct dirent *directoryPointer;
    	DIR *mydir;
 	
+
+	char *s;
+
 	int n = 0;
 	
 	int currentDirStorInt = 0;
@@ -45,15 +48,27 @@ void ls(char *path, bool recurse_flag)
       		return;
    	}
 	
-	for ( const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
+	for (const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
         {
        		++n;
         }
 	
+	for (int i = 0, const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
+        {
+       		++i;
+		
+		if(i == n)
+		{
+			s = p;
+		}
+		else
+		{
+			continue;
+		}
+        }
 	
 	
-	
-	
+	printf("test new path: %s\n", s);
 	printf("In directory %d: %s\n", n, path); //formatting
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
