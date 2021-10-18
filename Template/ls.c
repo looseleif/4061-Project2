@@ -19,7 +19,7 @@ void ls(char *path, bool recurse_flag)
 	
 
 	char *s;
-	char *tilda = "~";
+	char *tilda = '~';
 	int n = 0;
 	int i = 0;
 	int currentDirStorInt = 0;
