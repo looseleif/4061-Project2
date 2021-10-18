@@ -5,125 +5,64 @@
 #include <stdbool.h>
 #include <dirent.h>
 
-<<<<<<< Updated upstream
 
 
 //int currentDirStorInt = 0;
 
 
-void ls(char *path, bool recurse_flag) {
-=======
 void ls(char *path, bool recurse_flag) 
 {
 	char recursiveDirectoryStorage[2000];
    	struct dirent *directoryPointer;
    	DIR *mydir;
->>>>>>> Stashed changes
 	
-	char recursiveDirectoryStorage[1000][1000];
-	
-	DIR *mydir; //DIR is a type that represents the directory
-    	struct dirent *directory; //A variable that represents the directory as a whole
-
 	int excludePeriods = 0;
 
-	int currentDirStorInt = 0;
-	
-	if(path == NULL)
+	if(path == NULL) //gets the cwd and sets it equal to path
 	{
-		size_t Max_Path_Size = 100; //Just a random number I picked
+		size_t Max_Path_Size = 1000; //Just a random number I picked
 		char curDir[Max_Path_Size]; //array that will represent our current directory
 		
-		if(getcwd(curDir, Max_Path_Size) == NULL) //This function returns NULL for an error
+		if(getcwd(curDir, Max_Path_Size) == NULL) //Error checking
 		{
 			printf("CWD Error %s\n", curDir);
+			return;
 		}
-		else //This code is copy and paste from above, may reformat to make more efficient
+		else //if no error, sets our current path to path
 		{
 			path = curDir; 
 		}
 	}
 
-	if(recurse_flag == false) 
-	{ 
-    		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
-
-		//readdir returns a pointer to the current position in the directory
-    		while((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
-    		{	
-			if(excludePeriods < 2) 
-			{
-				excludePeriods++;
-			}
-			else
-			{
-        			printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
-			}
-    		}
-		
-		printf("\n"); //Formatting
-		
-    		closedir(mydir);
-	}
-	else if(recurse_flag == true)
+  	if ((mydir = opendir(path)) == NULL) //error checking to see if the path is valid
 	{
-		//for some reason putting a printf statement before this mydir line will cause a seg fault
-		//so don't do it
+		printf("Can't open %s\n", path);
+      		return;
+   	}
+	
+	printf("In directory: %s\n", path); //formatting
 
-		
-
-		mydir = opendir(path); //This sets mydir equal to a pointer to the specified path. "." works better for some reason
-		
-		printf("Path is set to: %s\n", path);
-
-		if (mydir == NULL) {
-
-			printf("End of Directory Train \n");
-			
+   	while ((directoryPointer = readdir(mydir)) != NULL) 
+	{
+		if(excludePeriods < 2) //checking for the undesireable outputs
+		{
+			excludePeriods++;
 		}
-		else {
-
-			//printf("PATH: \n"); //Formatting
-
-
-			//readdir returns a pointer to the current position in the directory
-			while ((directory = readdir(mydir)) != NULL) //readdir returns a null at the end of the directory
-			{
-				if (excludePeriods < 2)
-				{
-					excludePeriods++;
-				}
-				else
-				{
-					if (directory->d_type == DT_DIR) //This checks if it is a folder
-					{
-						//printf("before: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
-						sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", path.string(),directory->d_name);
-						//recursiveDirectoryStorage[currentDirStorInt] = mydir;
-						printf("after: %s\n", recursiveDirectoryStorage[currentDirStorInt]);
-						
-						currentDirStorInt++;
-						//ls(directory -> d_name, true);
-					}
-					printf(" %s ", directory->d_name); //d_name is an array that holds all the names of the directory
-
-
-				}
-			}
-
-			printf("\n");
-
-			for (int i = 0; i < currentDirStorInt; i++)
-			{
-				//printf("%s: \n", recursiveDirectoryStorage);
-				ls(recursiveDirectoryStorage[i], true);
-
-			}
-
+		//checks if we want to recurse and if it is a folder to enter into
+		else if (directoryPointer->d_type == DT_DIR && recurse_flag == true)
+		{
+         		sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name); //appends the path into the array
+         		ls(recursiveDirectoryStorage, true); //recurse.io
+			printf("Back in directory: %s\n", path); //makes the output easier to read
+      		}
+      		else //Outputs all file names
+		{
+         		printf("%s\n", directoryPointer->d_name);
 		}
-    		closedir(mydir);
+      	}
 
-	}
+   closedir(mydir); //closes files
+	
 }
 
 int main(int argc, char *argv[]){
