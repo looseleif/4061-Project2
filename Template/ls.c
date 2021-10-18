@@ -20,6 +20,8 @@ void ls(char *path, bool recurse_flag)
 	
 	int excludePeriods = 0;
 
+	printf("1\n");
+	
 	if(path == NULL) //gets the cwd and sets it equal to path
 	{
 		size_t Max_Path_Size = 1000; //Just a random number I picked
@@ -36,6 +38,8 @@ void ls(char *path, bool recurse_flag)
 		}
 	}
 
+	printf("1\n");
+	
   	if ((mydir = opendir(path)) == NULL) //error checking to see if the path is valid
 	{
 		printf("Can't open %s\n", path);
