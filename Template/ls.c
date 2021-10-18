@@ -69,7 +69,7 @@ void ls(char *path, bool recurse_flag)
 	
 	
 	//printf("test new path: %s\n", "~" + s);
-	printf("In directory: %s\n", "~" + s); //formatting
+	printf("In directory: %s\n", '~' + s); //formatting
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
