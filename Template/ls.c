@@ -13,7 +13,7 @@
 void ls(char *path, bool recurse_flag) 
 {
 	//printf("1\n");
-	char recursiveDirectoryStorage[2000][2000] = malloc(sizeof(char) * 2000);
+	char *recursiveDirectoryStorage[2000][2000] = malloc(sizeof(char) * 2000);
 
 	//recursiveDirectoryStorage = malloc(sizeof(char) * 2000);
 	
