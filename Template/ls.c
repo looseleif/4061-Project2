@@ -57,7 +57,7 @@ void ls(char *path, bool recurse_flag)
         {
        		++i;
 		
-		if(i == n)
+		if(i == n - 2)
 		{
 			s = p;
 		}
