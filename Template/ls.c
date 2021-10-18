@@ -19,7 +19,7 @@ void ls(char *path, bool recurse_flag)
 	
 
 	char *s;
-
+	char *tilda = "~";
 	int n = 0;
 	int i = 0;
 	int currentDirStorInt = 0;
@@ -59,7 +59,8 @@ void ls(char *path, bool recurse_flag)
 		
 		if(i == n - 2)
 		{
-			s = "~" + p;
+			sprintf(s, "%s%s", tilda, p);
+			//s = "~" + p;
 		}
 		else
 		{
