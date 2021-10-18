@@ -12,6 +12,7 @@
 
 void ls(char *path, bool recurse_flag) 
 {
+	printf("1\n");
 	char recursiveDirectoryStorage[2000][2000];
    	struct dirent *directoryPointer;
    	DIR *mydir;
