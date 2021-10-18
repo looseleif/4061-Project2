@@ -42,10 +42,13 @@ void ls(char *path, bool recurse_flag)
       		return;
    	}
 	
-	printf("In directory: %s\n", path); //formatting
+	printf("1\n");
 
+	printf("In directory: %s\n", path); //formatting
+	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
+		printf("2\n");
 		if(excludePeriods < 2) //checking for the undesireable outputs
 		{
 			excludePeriods++;
