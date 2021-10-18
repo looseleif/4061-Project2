@@ -66,6 +66,7 @@ void ls(char *path, bool recurse_flag)
 		{
          		sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", path, directoryPointer->d_name); //appends the path into the array
          		currentDirStorInt++;
+			printf(" %s ", directoryPointer->d_name);
 			//ls(recursiveDirectoryStorage, true); //recurse.io
 			//printf("Back in directory: %s\n", path); //makes the output easier to read
       		}
@@ -79,7 +80,7 @@ void ls(char *path, bool recurse_flag)
 		
 	for (int i = 0; i < currentDirStorInt; i++)
 	{
-		printf("%s: \n", recursiveDirectoryStorage[i]);
+		//printf("%s: \n", recursiveDirectoryStorage[i]);
 		ls(recursiveDirectoryStorage[i], true);
 
 	}
