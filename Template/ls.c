@@ -12,9 +12,11 @@
 
 void ls(char *path, bool recurse_flag) 
 {
-	char recursiveDirectoryStorage[2000];
+	char recursiveDirectoryStorage[2000][2000];
    	struct dirent *directoryPointer;
    	DIR *mydir;
+
+	int currentDirStorInt = 0;
 	
 	int excludePeriods = 0;
 
@@ -51,15 +53,25 @@ void ls(char *path, bool recurse_flag)
 		//checks if we want to recurse and if it is a folder to enter into
 		else if (directoryPointer->d_type == DT_DIR && recurse_flag == true)
 		{
-         		sprintf(recursiveDirectoryStorage, "%s/%s", path, directoryPointer->d_name); //appends the path into the array
-         		ls(recursiveDirectoryStorage, true); //recurse.io
-			printf("Back in directory: %s\n", path); //makes the output easier to read
+         		sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", path, directoryPointer->d_name); //appends the path into the array
+         		currentDirStorInt++;
+			//ls(recursiveDirectoryStorage, true); //recurse.io
+			//printf("Back in directory: %s\n", path); //makes the output easier to read
       		}
       		else //Outputs all file names
 		{
-         		printf("%s\n", directoryPointer->d_name);
+         		printf(" %s ", directoryPointer->d_name);
 		}
-      	}
+	}
+		
+	printf("\n"); //formatting
+		
+	for (int i = 0; i < currentDirStorInt; i++)
+	{
+		//printf("%s: \n", recursiveDirectoryStorage);
+		ls(recursiveDirectoryStorage[i], true);
+
+	}
 
    closedir(mydir); //closes files
 	
