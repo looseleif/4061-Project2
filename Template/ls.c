@@ -21,7 +21,7 @@ void ls(char *path, bool recurse_flag)
 	char *s;
 
 	int n = 0;
-	
+	int i = 0;
 	int currentDirStorInt = 0;
 	
 	int excludePeriods = 0;
@@ -53,7 +53,7 @@ void ls(char *path, bool recurse_flag)
        		++n;
         }
 	
-	for (int i = 0, const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
+	for (const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
         {
        		++i;
 		
