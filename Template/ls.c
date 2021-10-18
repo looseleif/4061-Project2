@@ -53,7 +53,7 @@ void ls(char *path, bool recurse_flag)
        		++n;
         }
 	
-	for (const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
+	for (char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
         {
        		++i;
 		
@@ -68,8 +68,8 @@ void ls(char *path, bool recurse_flag)
         }
 	
 	
-	printf("test new path: %s\n", s);
-	printf("In directory %d: %s\n", n, path); //formatting
+	//printf("test new path: %s\n", s);
+	printf("In directory: %s\n", s); //formatting
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
