@@ -16,11 +16,6 @@ void ls(char *path, bool recurse_flag)
 	
    	struct dirent *directoryPointer;
    	DIR *mydir;
-	
-	//char *s;
-	//char *tilda = '~';
-	//int n = 0;
-	//int i = 0;
 
 	int currentDirStorInt = 0;
 	
@@ -47,28 +42,7 @@ void ls(char *path, bool recurse_flag)
 		printf("Can't open %s\n", path);
       		return;
    	}
-	
-	//for (const char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
-       // {
-       		//++n;
-       // }
-	
-	//for (char *p = path; ( p = strchr( p, '/' ) ) != NULL; ++p )
-        //{
-       		//++i;
 		
-		//if(i == n - 2)
-		//{
-			//sprintf(s, "%s%s", tilda, p);
-			//s = "~" + p;
-		//}
-		//else
-		//{
-			//continue;
-		//}
-       // }
-	
-	
 	printf("In directory: %s\n", path); //formatting
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
