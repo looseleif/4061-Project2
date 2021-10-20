@@ -163,8 +163,12 @@ int main(){
 
 				printf("hi >>\n");
 			}
+			
 		}
 		
+
+		commandSplit[counter - 1] = NULL; //gets rid of the file.txt in commandSplit
+		commandSplit[counter - 2] = NULL; //gets rid of the > or >> symbol in commandSplit
 		
 			if(strcmp(commandSplit[0], "cd") == 0)
 			{
