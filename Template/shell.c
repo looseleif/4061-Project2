@@ -6,6 +6,7 @@
 #include <errno.h>
 #include <sys/wait.h>
 #include <stdbool.h>
+#include <fcntl.h>
 
 #include "util.h"
 
@@ -17,6 +18,10 @@ int main(){
 	char SHELL_TAG[] = "[project-4061]";			//tag for printing out the cwd
 	int MAX_COMMAND_SIZE = 1000;
 	int PATH_SIZE = pathconf(".", _PC_PATH_MAX);	//gets the PC specific maximum path length for use in memory allocation
+	int redirectionType = 0;
+	int pipe = 0;
+	int file_desc;
+	int terminal = dup(1);
 
 	//error checking for pathconf
 	errno = 0;
@@ -120,7 +125,7 @@ int main(){
 		while(strcmp(buf, "exit\n") != 0)
 		{
 			char * commandSplit[50];
-    		int counter = 0;
+    			int counter = 0;
     
     		// Gets the first argument of the command (the command itself)
     		commandSplit[0] = strtok(buf, " \n\r");
@@ -128,11 +133,39 @@ int main(){
     		// Get the rest of the arguments
     		while (commandSplit[counter] != NULL)
     		{
-				//printf("%d: %s\n",counter, commandSplit[counter]);
+			//printf("%d: %s\n",counter, commandSplit[counter]);
         		counter = counter + 1;
         		commandSplit[counter] = strtok(NULL, " \n\r");
-   			}
-			
+   		}
+		
+		for(int i = 0; i < counter; i++) //checking for file redirection
+		{
+			if(strcmp(commandSplit[i], ">") == 0) //if no append
+			{
+				fclose(fopen(commandSplit[i+1], "w")); //clears the output file
+				file_desc = open(commandSplit[i+1], O_WRONLY); //opens the file
+				if(file_desc < 0) //error checking
+				{
+       	 				printf("Error opening the file\n");
+				}
+				dup2(file_desc, STDOUT_FILENO); //changes the output to the file
+				printf("yay >\n");
+			}
+			else if (strcmp(commandSplit[i], ">>") == 0) //if append
+			{
+				
+				file_desc = open(commandSplit[i+1], O_WRONLY | O_APPEND); //opens the file
+				if(file_desc < 0) //error checking
+				{
+       	 				printf("Error opening the file\n");
+				}
+				dup2(file_desc, STDOUT_FILENO); //changes the output to the file
+
+				printf("hi >>\n");
+			}
+		}
+		
+		
 			if(strcmp(commandSplit[0], "cd") == 0)
 			{
 				if(counter != 2)
@@ -155,16 +188,104 @@ int main(){
 				}
 				else if (lsPID == 0) //child
 				{
-					//printf("\n%s\n", commandSplit[0]);
+					//printf("\n%d\n", counter);
 					char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
 					sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
 					commandSplit[0] = ABS_PATH_BUF;
 					printf("\n%s\n", commandSplit[0]);
-					for(int i = 0; i < strlen(commandSplit); i++)
+					
+					printf("1:%s 2:%s %d\n", commandSplit[1], commandSplit[2], counter);
+					
+					switch(counter)
 					{
-						printf("%d: %s\n", i, commandSplit[i]);
+						case 5: //ls path -R > abc.txt
+						{
+							printf("5\n");
+							if(strcmp(commandSplit[3], ">") == 0)
+							{
+								printf("5 >\n");
+						
+							}
+							else if(strcmp(commandSplit[1], ">>") == 0)
+							{
+								printf("5 >>\n");
+						
+							}
+							break;
+						}
+						case 4: //ls -R > abc.txt or ls path > abc.txt
+						{
+							printf("4\n");
+							if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">") == 0)
+							{
+								printf("4 -R >\n");
+						
+							}
+							else if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">>") == 0)
+							{
+								printf("4 -R >>\n");
+						
+							}
+							else if(strcmp(commandSplit[2], ">") == 0)
+							{
+								printf("4 path >\n");
+						
+							}
+							else if(strcmp(commandSplit[2], ">>") == 0)
+							{
+								printf("4 path >>\n");
+						
+							}
+							break;
+						}
+						case 3: //ls > abc.txt or ls -R path
+						{
+							printf("3\n");
+							if(strcmp(commandSplit[1], ">") == 0)
+							{
+								printf(">\n");
+						
+							}
+							else if(strcmp(commandSplit[1], ">>") == 0)
+							{
+								printf(">>\n");
+						
+							}
+							else if(strcmp(commandSplit[1], "-R") == 0)
+							{
+								printf("-R path\n");
+						
+							}
+							break;
+						}
+						case 2: //ls path or ls -R
+						{
+							printf("2\n");
+							if(strcmp(commandSplit[1], "-R") == 0)
+							{
+								printf("-R\n");
+						
+							}
+							else
+							{
+								printf("path only\n");
+						
+							}
+							break;
+						}
+						case 1: //ls
+						{
+							printf("1\n");
+							execv(commandSplit[0],commandSplit);
+							break;
+						}	
+					
+						
+					
 					}
-					execv(commandSplit[0],commandSplit);
+					
+
+				
 				}
 				else //parent
 				{
@@ -235,7 +356,9 @@ int main(){
 				}
 			}
 			
-
+			close(file_desc);
+			//STDOUT_FILENO = fileno(stdout);
+			dup2(terminal,1);
 			//gets current working directory & checks for error
 			if(getcwd(currentDirectory, PATH_SIZE) == NULL)
 			{
@@ -244,6 +367,7 @@ int main(){
 				free(TEMPLATE_DIR);
 				exit(0);
 			}
+			
 			printf("%s%s $ ", SHELL_TAG, currentDirectory);   
 			fgets(buf, MAX_COMMAND_SIZE, stdin);
 		}
