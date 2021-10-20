@@ -160,6 +160,10 @@ int main(){
 					sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
 					commandSplit[0] = ABS_PATH_BUF;
 					printf("\n%s\n", commandSplit[0]);
+					for(int i = 0; i < strlen(commandsplit); i++)
+					{
+						printf("%d: %s\n", i, commandSplit[i]);
+					}
 					execv(commandSplit[0],commandSplit);
 				}
 				else //parent
