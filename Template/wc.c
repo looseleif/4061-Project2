@@ -17,9 +17,12 @@ void wc(int mode, char* path){
 	int wordCount = 0;
 	int characterCount = 0;
 
+	int entered = 0;
+	int start = 1;
+
 	char buf[1];
 
-	char prev[1];
+	//char prev[1];
 
 	if (path == NULL) {
 
@@ -44,7 +47,7 @@ void wc(int mode, char* path){
 
 
 		// printf("mode 0\n");
-
+		/*
 		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
 			if ( (buf[0] != ' ') && (buf[0] != '\r') ) {
@@ -77,21 +80,48 @@ void wc(int mode, char* path){
 
 				}
 
-
-
-
 				characterCount++;
-
-
-
 
 				prev[0] = buf[0];
 
 			}
 
 		}
+		*/
 
-		printf("\t%d\t%d\t%d\n", lineCount, wordCount, characterCount);
+
+
+
+		while (read(fd[0], buf, sizeof(buf)) != 0) {
+
+			characterCount = characterCount + 1;
+
+
+			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0') { //|| buf[0] == '\r'
+
+				if (entered) {
+
+					entered = 0;
+					wordCount = wordCount + 1;
+
+				}
+
+				if (buf[0] == '\0' || buf[0] == '\n') {
+
+					lineCount = lineCount + 1;
+
+				}
+
+			}
+			else {
+
+				entered = 1;
+
+			}
+
+		}
+
+		printf("%4d %4d %4d %s\n", lineCount, wordCount, characterCount, path);
 
 		// display all three col
 
@@ -129,9 +159,17 @@ void wc(int mode, char* path){
 
 			if (buf[0] == ' ' || buf[0] == '\n' || buf[0] == '\t') {
 
-				wordCount++;
+				if (entered) {
+
+					wordCount++;
+					entered = 0;
+				}
+
+				
 
 			}
+
+
 
 		}
 
