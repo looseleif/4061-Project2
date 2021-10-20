@@ -23,7 +23,7 @@ void wc(int mode, char* path){
 
 	if (path == NULL) {
 
-		printf("This means we must use STDIN for input\n");
+		//printf("This means we must use STDIN for input\n");
 		
 		// set path equal to the piped input from STDIN
 
@@ -63,7 +63,7 @@ void wc(int mode, char* path){
 
 			while (read(fd[0], buf, sizeof(buf))) {
 
-				printf("prev:'%d' buf:'%d'\n", prev[0], buf[0]);
+				//printf("prev:'%d' buf:'%d'\n", prev[0], buf[0]);
 
 				if (buf[0] == '\n') {
 
