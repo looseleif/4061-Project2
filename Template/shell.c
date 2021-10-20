@@ -163,223 +163,202 @@ int main(){
 
 				printf("hi >>\n");
 			}
-			
 		}
-		
 
 		commandSplit[counter - 1] = NULL; //gets rid of the file.txt in commandSplit
 		commandSplit[counter - 2] = NULL; //gets rid of the > or >> symbol in commandSplit
 		
-			if(strcmp(commandSplit[0], "cd") == 0)
+		if(strcmp(commandSplit[0], "cd") == 0)
+		{
+			if(counter != 2)
 			{
-				if(counter != 2)
-				{
-					printf("Command error\n");
+				printf("Command error\n");
 
-				}
-				else if(chdir(commandSplit[1]) < 0)
-				{
-					perror("[4061-shell]: ");
-				}
 			}
-			else if(strcmp(commandSplit[0], "ls") == 0)
+			else if(chdir(commandSplit[1]) < 0)
 			{
-				pid_t lsPID = fork();
-
-				if (lsPID < 0) //error
-				{
-					printf("Command error\n");
-				}
-				else if (lsPID == 0) //child
-				{
-					//printf("\n%d\n", counter);
-					char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
-					sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
-					commandSplit[0] = ABS_PATH_BUF;
-					printf("\n%s\n", commandSplit[0]);
-					
-					printf("1:%s 2:%s %d\n", commandSplit[1], commandSplit[2], counter);
-					
-					switch(counter)
-					{
-						case 5: //ls path -R > abc.txt
-						{
-							printf("5\n");
-							if(strcmp(commandSplit[3], ">") == 0)
-							{
-								printf("5 >\n");
-						
-							}
-							else if(strcmp(commandSplit[1], ">>") == 0)
-							{
-								printf("5 >>\n");
-						
-							}
-							break;
-						}
-						case 4: //ls -R > abc.txt or ls path > abc.txt
-						{
-							printf("4\n");
-							if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">") == 0)
-							{
-								printf("4 -R >\n");
-						
-							}
-							else if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">>") == 0)
-							{
-								printf("4 -R >>\n");
-						
-							}
-							else if(strcmp(commandSplit[2], ">") == 0)
-							{
-								printf("4 path >\n");
-						
-							}
-							else if(strcmp(commandSplit[2], ">>") == 0)
-							{
-								printf("4 path >>\n");
-						
-							}
-							break;
-						}
-						case 3: //ls > abc.txt or ls -R path
-						{
-							printf("3\n");
-							if(strcmp(commandSplit[1], ">") == 0)
-							{
-								printf(">\n");
-						
-							}
-							else if(strcmp(commandSplit[1], ">>") == 0)
-							{
-								printf(">>\n");
-						
-							}
-							else if(strcmp(commandSplit[1], "-R") == 0)
-							{
-								printf("-R path\n");
-						
-							}
-							break;
-						}
-						case 2: //ls path or ls -R
-						{
-							printf("2\n");
-							if(strcmp(commandSplit[1], "-R") == 0)
-							{
-								printf("-R\n");
-						
-							}
-							else
-							{
-								printf("path only\n");
-						
-							}
-							break;
-						}
-						case 1: //ls
-						{
-							printf("1\n");
-							execv(commandSplit[0],commandSplit);
-							break;
-						}	
-					
-						
-					
-					}
-					
-
-				
-				}
-				else //parent
-				{
-					//wait for lsPID, error checking
-					if(waitpid(lsPID, NULL, 0) < 0) 
-					{
-						printf("Command error\n"); 
-						free(currentDirectory);
-						free(buf);
-						free(TEMPLATE_DIR);
-						exit(0);
-					}
-				}
+				perror("[4061-shell]: ");
 			}
-			else if(strcmp(commandSplit[0], "wc") == 0)
-			{
-				pid_t wcPID = fork();
-
-				if (wcPID < 0) //error
-				{
-					printf("Command error\n");
-				}
-				else if (wcPID == 0) //child
-				{
-					//printf("\n%s\n", commandSplit[0]);
-					char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
-					sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
-					//printf("\n%s\n", commandSplit[0]);
-					commandSplit[0] = ABS_PATH_BUF;
-					execv(commandSplit[0],commandSplit);
-				}
-				else //parent
-				{
-					//wait for wcPID, error checking
-					if(waitpid(wcPID, NULL, 0) < 0) 
-					{
-						printf("Command error\n");
-						free(currentDirectory);
-						free(buf);
-						free(TEMPLATE_DIR);
-						exit(0);
-					}
-				}
-			}
-			else
-			{
-				pid_t miscPID = fork();
-
-				if (miscPID < 0) //error
-				{
-					printf("Command error\n");
-				}
-				else if (miscPID == 0) //child
-				{
-					execvp(commandSplit[0],commandSplit);
-				}
-				else //parent
-				{
-					//wait for miscPID, error checking
-					if(waitpid(miscPID, NULL, 0) < 0)
-					{
-						printf("Command error\n"); 
-						free(currentDirectory); 
-						free(buf); 
-						free(TEMPLATE_DIR);
-						exit(0);
-					}
-				}
-			}
-			
-			close(file_desc);
-			//STDOUT_FILENO = fileno(stdout);
-			dup2(terminal,1);
-			//gets current working directory & checks for error
-			if(getcwd(currentDirectory, PATH_SIZE) == NULL)
-			{
-				perror("ERROR: failed to get current working directory");
-				free(currentDirectory);
-				free(TEMPLATE_DIR);
-				exit(0);
-			}
-			
-			printf("%s%s $ ", SHELL_TAG, currentDirectory);   
-			fgets(buf, MAX_COMMAND_SIZE, stdin);
 		}
+		else if(strcmp(commandSplit[0], "ls") == 0)
+		{
+			pid_t lsPID = fork();
+			if (lsPID < 0) //error
+			{
+				printf("Command error\n");
+			}
+			else if (lsPID == 0) //child
+			{
+				//printf("\n%d\n", counter);
+				char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
+				sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
+				commandSplit[0] = ABS_PATH_BUF;
+				printf("\n%s\n", commandSplit[0]);
+				
+				printf("1:%s 2:%s %d\n", commandSplit[1], commandSplit[2], counter);
+				
+				switch(counter)
+				{
+					case 5: //ls path -R > abc.txt
+					{
+						printf("5\n");
+						if(strcmp(commandSplit[3], ">") == 0)
+						{
+							printf("5 >\n");
+						}
+						else if(strcmp(commandSplit[1], ">>") == 0)
+						{
+							printf("5 >>\n");
+						}
+						break;
+					}
+					case 4: //ls -R > abc.txt or ls path > abc.txt
+					{
+						printf("4\n");
+						if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">") == 0)
+						{
+							printf("4 -R >\n");
+						}
+						else if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">>") == 0)
+						{
+							printf("4 -R >>\n");
+						}
+						else if(strcmp(commandSplit[2], ">") == 0)
+						{
+							printf("4 path >\n");
+						}
+						else if(strcmp(commandSplit[2], ">>") == 0)
+						{
+							printf("4 path >>\n");
+						}
+						break;
+					}
+					case 3: //ls > abc.txt or ls -R path
+					{
+						printf("3\n");
+						if(strcmp(commandSplit[1], ">") == 0)
+						{
+							printf(">\n");
+						}
+						else if(strcmp(commandSplit[1], ">>") == 0)
+						{
+							printf(">>\n");
+						}
+						else if(strcmp(commandSplit[1], "-R") == 0)
+						{
+						printf("-R path\n");
+						}
+						break;
+					}
+					case 2: //ls path or ls -R
+					{
+						printf("2\n");
+						if(strcmp(commandSplit[1], "-R") == 0)
+						{
+							printf("-R\n");
+						}
+						else
+						{
+							printf("path only\n");
+						}
+						break;
+					}
+					case 1: //ls
+					{
+						printf("1\n");
+						execv(commandSplit[0],commandSplit);
+						break;
+					}	
+				}
+			}
+			else //parent
+			{
+				//wait for lsPID, error checking
+				if(waitpid(lsPID, NULL, 0) < 0) 
+				{
+					printf("Command error\n"); 
+					free(currentDirectory);
+					free(buf);
+					free(TEMPLATE_DIR);
+					exit(0);
+				}
+			}
+		}
+		else if(strcmp(commandSplit[0], "wc") == 0)
+		{
+			pid_t wcPID = fork();
+			if (wcPID < 0) //error
+			{
+				printf("Command error\n");
+			}
+			else if (wcPID == 0) //child
+			{
+				//printf("\n%s\n", commandSplit[0]);
+				char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
+				sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
+				//printf("\n%s\n", commandSplit[0]);
+				commandSplit[0] = ABS_PATH_BUF;
+				execv(commandSplit[0],commandSplit);
+			}
+			else //parent
+			{
+				//wait for wcPID, error checking
+				if(waitpid(wcPID, NULL, 0) < 0) 
+				{
+					printf("Command error\n");
+					free(currentDirectory);
+					free(buf);
+					free(TEMPLATE_DIR);
+					exit(0);
+				}
+			}
+		}
+		else
+		{
+			pid_t miscPID = fork();
 
-		//exit
-		free(currentDirectory);
-		free(buf);
-		free(TEMPLATE_DIR);
-		return 0;
+			if (miscPID < 0) //error
+			{
+				printf("Command error\n");
+			}
+			else if (miscPID == 0) //child
+			{
+				execvp(commandSplit[0],commandSplit);
+			}
+			else //parent
+			{
+				//wait for miscPID, error checking
+				if(waitpid(miscPID, NULL, 0) < 0)
+				{
+					printf("Command error\n"); 
+					free(currentDirectory); 
+					free(buf); 
+					free(TEMPLATE_DIR);
+					exit(0);
+				}
+			}
+		}
+			
+		close(file_desc);
+		//STDOUT_FILENO = fileno(stdout);
+		dup2(terminal,1);
+		//gets current working directory & checks for error
+		if(getcwd(currentDirectory, PATH_SIZE) == NULL)
+		{
+			perror("ERROR: failed to get current working directory");
+			free(currentDirectory);
+			free(TEMPLATE_DIR);
+			exit(0);
+		}
+			
+		printf("%s%s $ ", SHELL_TAG, currentDirectory);   
+		fgets(buf, MAX_COMMAND_SIZE, stdin);
+	}
+
+	//exit
+	free(currentDirectory);
+	free(buf);
+	free(TEMPLATE_DIR);
+	return 0;
 	}
 }
