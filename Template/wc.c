@@ -28,11 +28,18 @@ void wc(int mode, char* path){
 
 	//char prev[1];
 
+
+	size_t Max_Path_Size = 1000; //Just a random number I picked
+	char curDir[Max_Path_Size]; //array that will represent our current directory
+
+	printf("hello1");
+
 	if (path == NULL) {
 
 		//printf("This means we must use STDIN for input\n");
 		
 		// set path equal to the piped input from STDIN
+
 
 		if (dup2(fd[0], STDIN_FILENO) < 0) {
 
@@ -42,6 +49,19 @@ void wc(int mode, char* path){
 
 	}
 	else {
+
+		printf("hello2");
+
+		if (getcwd(curDir, Max_Path_Size) == NULL) //Error checking
+		{
+			printf("CWD Error %s\n", curDir);
+			return;
+		}
+		else //if no error, sets our current path to path
+		{
+			//path = curDir;
+		}
+		printf("hello3");
 
 		fd[0] = open(path, O_RDONLY); // NEED ERROR HANDLE
 
@@ -313,6 +333,9 @@ void wc(int mode, char* path){
 }
 
 int main(int argc, char** argv){
+	
+	printf("hello112");
+
 	if(argc>2){
 		if(strcmp(argv[1], "-l") == 0) { 
 			wc(1, argv[2]);
