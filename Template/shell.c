@@ -22,6 +22,7 @@ int main(){
 	int pipe = 0;
 	int file_desc;
 	int terminal = dup(1);
+	int ifRedirected = 0;
 
 	//error checking for pathconf
 	errno = 0;
@@ -137,7 +138,7 @@ int main(){
         		counter = counter + 1;
         		commandSplit[counter] = strtok(NULL, " \n\r");
    		}
-		
+
 		for(int i = 0; i < counter; i++) //checking for file redirection
 		{
 			if(strcmp(commandSplit[i], ">") == 0) //if no append
@@ -149,7 +150,7 @@ int main(){
        	 				printf("Error opening the file\n");
 				}
 				dup2(file_desc, STDOUT_FILENO); //changes the output to the file
-				printf("yay >\n");
+				ifRedirected = 1;
 			}
 			else if (strcmp(commandSplit[i], ">>") == 0) //if append
 			{
@@ -160,13 +161,14 @@ int main(){
        	 				printf("Error opening the file\n");
 				}
 				dup2(file_desc, STDOUT_FILENO); //changes the output to the file
-
-				printf("hi >>\n");
+				ifRedirected = 1;
 			}
 		}
-
-		commandSplit[counter - 1] = NULL; //gets rid of the file.txt in commandSplit
-		commandSplit[counter - 2] = NULL; //gets rid of the > or >> symbol in commandSplit
+		if (ifRedirected == 1)
+		{
+			commandSplit[counter - 1] = NULL; //gets rid of the file.txt in commandSplit
+			commandSplit[counter - 2] = NULL; //gets rid of the > or >> symbol in commandSplit
+		}
 		
 		if(strcmp(commandSplit[0], "cd") == 0)
 		{
@@ -193,83 +195,12 @@ int main(){
 				char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
 				sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
 				commandSplit[0] = ABS_PATH_BUF;
-				printf("\n%s\n", commandSplit[0]);
+				//printf("\n%s\n", commandSplit[0]);
 				
 				printf("1:%s 2:%s %d\n", commandSplit[1], commandSplit[2], counter);
 				
-				switch(counter)
-				{
-					case 5: //ls path -R > abc.txt
-					{
-						printf("5\n");
-						if(strcmp(commandSplit[3], ">") == 0)
-						{
-							printf("5 >\n");
-						}
-						else if(strcmp(commandSplit[1], ">>") == 0)
-						{
-							printf("5 >>\n");
-						}
-						break;
-					}
-					case 4: //ls -R > abc.txt or ls path > abc.txt
-					{
-						printf("4\n");
-						if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">") == 0)
-						{
-							printf("4 -R >\n");
-						}
-						else if(strcmp(commandSplit[1],"-R") == 0 && strcmp(commandSplit[2],">>") == 0)
-						{
-							printf("4 -R >>\n");
-						}
-						else if(strcmp(commandSplit[2], ">") == 0)
-						{
-							printf("4 path >\n");
-						}
-						else if(strcmp(commandSplit[2], ">>") == 0)
-						{
-							printf("4 path >>\n");
-						}
-						break;
-					}
-					case 3: //ls > abc.txt or ls -R path
-					{
-						printf("3\n");
-						if(strcmp(commandSplit[1], ">") == 0)
-						{
-							printf(">\n");
-						}
-						else if(strcmp(commandSplit[1], ">>") == 0)
-						{
-							printf(">>\n");
-						}
-						else if(strcmp(commandSplit[1], "-R") == 0)
-						{
-						printf("-R path\n");
-						}
-						break;
-					}
-					case 2: //ls path or ls -R
-					{
-						printf("2\n");
-						if(strcmp(commandSplit[1], "-R") == 0)
-						{
-							printf("-R\n");
-						}
-						else
-						{
-							printf("path only\n");
-						}
-						break;
-					}
-					case 1: //ls
-					{
-						printf("1\n");
-						execv(commandSplit[0],commandSplit);
-						break;
-					}	
-				}
+				execv(commandSplit[0],commandSplit);
+				printf("FAIL\n");
 			}
 			else //parent
 			{
@@ -281,6 +212,13 @@ int main(){
 					free(buf);
 					free(TEMPLATE_DIR);
 					exit(0);
+				}
+
+				if(ifRedirected == 1)
+				{	
+					close(file_desc);
+					dup2(terminal,1);
+					ifRedirected = 0;
 				}
 			}
 		}
@@ -338,10 +276,12 @@ int main(){
 				}
 			}
 		}
-			
-		close(file_desc);
-		//STDOUT_FILENO = fileno(stdout);
-		dup2(terminal,1);
+		//if(ifRedirected == 1)
+		//{	
+			//close(file_desc);
+			//dup2(terminal,1);
+			//ifRedirected = 0;
+		//}
 		//gets current working directory & checks for error
 		if(getcwd(currentDirectory, PATH_SIZE) == NULL)
 		{
