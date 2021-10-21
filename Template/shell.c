@@ -21,8 +21,8 @@ int main(){
 	int redirectionType = 0;
 	int pipe = 0;
 	int file_desc;
-	int terminal = dup(1);
-	int ifRedirected = 0;
+	//int terminal = dup(STDOUT_FILENO);
+	//int ifRedirected = 0;
 
 	//error checking for pathconf
 	errno = 0;
@@ -126,7 +126,7 @@ int main(){
 		while(strcmp(buf, "exit\n") != 0)
 		{
 			char * commandSplit[50];
-    			int counter = 0;
+    		int counter = 0;
     
     		// Gets the first argument of the command (the command itself)
     		commandSplit[0] = strtok(buf, " \n\r");
@@ -137,14 +137,14 @@ int main(){
 			//printf("%d: %s\n",counter, commandSplit[counter]);
         		counter = counter + 1;
         		commandSplit[counter] = strtok(NULL, " \n\r");
-   		}
-
+   			}
+		   /*
 		for(int i = 0; i < counter; i++) //checking for file redirection
 		{
 			if(strcmp(commandSplit[i], ">") == 0) //if no append
 			{
 				fclose(fopen(commandSplit[i+1], "w")); //clears the output file
-				file_desc = open(commandSplit[i+1], O_WRONLY); //opens the file
+				file_desc = open(commandSplit[i+1], O_WRONLY | O_CREAT); //opens the file
 				if(file_desc < 0) //error checking
 				{
        	 				printf("Error opening the file\n");
@@ -155,7 +155,7 @@ int main(){
 			else if (strcmp(commandSplit[i], ">>") == 0) //if append
 			{
 				
-				file_desc = open(commandSplit[i+1], O_WRONLY | O_APPEND); //opens the file
+				file_desc = open(commandSplit[i+1], O_WRONLY | O_APPEND | O_CREAT); //opens the file
 				if(file_desc < 0) //error checking
 				{
        	 				printf("Error opening the file\n");
@@ -169,7 +169,7 @@ int main(){
 			commandSplit[counter - 1] = NULL; //gets rid of the file.txt in commandSplit
 			commandSplit[counter - 2] = NULL; //gets rid of the > or >> symbol in commandSplit
 		}
-		
+		*/
 		if(strcmp(commandSplit[0], "cd") == 0)
 		{
 			if(counter != 2)
@@ -192,14 +192,29 @@ int main(){
 			else if (lsPID == 0) //child
 			{
 				//printf("\n%d\n", counter);
-				char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
+				//char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
+				char * ABS_PATH_BUF = (char*) malloc(1000);
 				sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
 				commandSplit[0] = ABS_PATH_BUF;
+
+				char * args[counter + 1];
+
+				int i;
+				for(i = 0; i < counter; i++)
+				{
+					//printf("%s ", ABS_PATH_BUF);
+					args[i] = (char *) malloc(1000);
+					strcpy(args[i], commandSplit[i]);
+					printf("%d:%s\n", i, args[i]);
+				}
+
+				args[counter] = NULL;
 				//printf("\n%s\n", commandSplit[0]);
 				
-				printf("1:%s 2:%s %d\n", commandSplit[1], commandSplit[2], counter);
+				//printf("1:%s 2:%s %d\n", commandSplit[0], commandSplit[1], counter);
 				
-				execv(commandSplit[0],commandSplit);
+				//execvp(commandSplit[0],commandSplit);
+				execv(args[0],args);
 				printf("FAIL\n");
 			}
 			else //parent
@@ -214,12 +229,12 @@ int main(){
 					exit(0);
 				}
 
-				if(ifRedirected == 1)
+				/*if(ifRedirected == 1)
 				{	
 					close(file_desc);
 					dup2(terminal,1);
 					ifRedirected = 0;
-				}
+				}*/
 			}
 		}
 		else if(strcmp(commandSplit[0], "wc") == 0)
@@ -276,12 +291,15 @@ int main(){
 				}
 			}
 		}
-		//if(ifRedirected == 1)
-		//{	
-			//close(file_desc);
-			//dup2(terminal,1);
-			//ifRedirected = 0;
-		//}
+		/*
+		if(ifRedirected == 1)
+		{	
+			close(file_desc);
+			dup2(terminal,1);
+			close(terminal);
+			ifRedirected = 0;
+		}   */  
+
 		//gets current working directory & checks for error
 		if(getcwd(currentDirectory, PATH_SIZE) == NULL)
 		{

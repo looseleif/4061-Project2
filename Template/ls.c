@@ -5,8 +5,6 @@
 #include <stdbool.h>
 #include <dirent.h>
 
-
-
 //int currentDirStorInt = 0;
 
 
@@ -47,12 +45,13 @@ void ls(char *path, bool recurse_flag)
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
+		//printf("D_TYPE: %d\n", directoryPointer->d_type);
 		if(excludePeriods < 2) //checking for the undesireable outputs
 		{
 			excludePeriods++;
 		}
 		//checks if we want to recurse and if it is a folder to enter into
-		else if (directoryPointer->d_type == DT_DIR && recurse_flag == true)
+		else if (directoryPointer->d_type == 4 && recurse_flag == true)
 		{
          		sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", path, directoryPointer->d_name); //appends the path into the array
          		currentDirStorInt++;
@@ -80,6 +79,9 @@ void ls(char *path, bool recurse_flag)
 }
 
 int main(int argc, char *argv[]){
+
+	printf("ARGC: %d \n ", argc);
+
 	if(argc < 2){ // No -R flag and no path name
 		ls(NULL, false);
 	} else if(strcmp(argv[1], "-R") == 0) { 
