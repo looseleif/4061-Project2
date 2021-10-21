@@ -17,6 +17,10 @@ void wc(int mode, char* path){
 	int wordCount = 0;
 	int characterCount = 0;
 
+	int i = 0;
+	int counter = 0;
+	int maximum = 0;
+
 	int entered = 0;
 	int start = 1;
 
@@ -90,14 +94,42 @@ void wc(int mode, char* path){
 		*/
 
 
+		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
+			characterCount = characterCount + 1;
+
+			if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+
+				if (entered && buf[0] != '\n' && buf[0] != '\r') {
+
+					entered = 0;
+					wordCount = wordCount + 1;
+
+				}
+
+				if (buf[0] == '\0' || buf[0] == '\n') {
+
+					lineCount = lineCount + 1;
+
+				}
+			}
+			else {
+
+				entered = 1;
+
+			}
+		}
+
+		//printf("%s\n", buf);
 
 		while (read(fd[0], buf, sizeof(buf)) != 0) {
+
+			//printf("[%s]\n", buf);
 
 			characterCount = characterCount + 1;
 
 
-			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0') { //|| buf[0] == '\r'
+			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
 				if (entered) {
 
@@ -121,7 +153,42 @@ void wc(int mode, char* path){
 
 		}
 
-		printf("%4d %4d %4d %s\n", lineCount, wordCount, characterCount, path);
+		if (entered) {
+
+			wordCount++;
+
+		}
+
+		// used to count max digits to use...
+
+		int list[3] = {lineCount, wordCount, characterCount};
+
+		int tempNum;
+
+		for (i = 0; i < 3; i++) {
+
+
+			tempNum = list[i];
+
+			counter = 0;
+
+			while (tempNum != 0) {
+
+				tempNum = tempNum / 10;
+				counter++;
+
+			}
+			
+			if (counter > maximum) {
+
+				maximum = counter;
+
+			}
+
+		}
+
+
+		printf("%*d %*d %*d %s\n", maximum, lineCount, maximum, wordCount, maximum, characterCount, path);
 
 		// display all three col
 
@@ -132,13 +199,26 @@ void wc(int mode, char* path){
 
 		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
-			lineCount = 1;
+			if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
 
-			while (read(fd[0], buf, sizeof(buf))) {
+				if (buf[0] == '\0' || buf[0] == '\n') {
 
-				if (buf[0] == '\n') {
+					lineCount = lineCount + 1;
 
-					lineCount++;
+				}
+			}
+
+		}
+
+		//printf("%s\n", buf);
+
+		while (read(fd[0], buf, sizeof(buf)) != 0) {
+
+			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+
+				if (buf[0] == '\0' || buf[0] == '\n') {
+
+					lineCount = lineCount + 1;
 
 				}
 
@@ -146,7 +226,7 @@ void wc(int mode, char* path){
 
 		}
 
-		printf("\t%d\n", lineCount);
+		printf("%d %s\n", lineCount, path);
 
 		// lines
 
@@ -155,25 +235,54 @@ void wc(int mode, char* path){
 
 		// printf("2\n");
 
-		while (read(fd[0], buf, sizeof(buf))) {
+		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
-			if (buf[0] == ' ' || buf[0] == '\n' || buf[0] == '\t') {
+			if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+
+				if (entered && buf[0] != '\n' && buf[0] != '\r') {
+
+					entered = 0;
+					wordCount = wordCount + 1;
+
+				}
+
+			}
+			else {
+
+				entered = 1;
+
+			}
+		}
+
+		while (read(fd[0], buf, sizeof(buf)) != 0) {
+
+			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
 				if (entered) {
 
-					wordCount++;
 					entered = 0;
+					wordCount = wordCount + 1;
+
 				}
 
-				
+			}
+			else {
+
+				entered = 1;
 
 			}
 
+		}
 
+		if (entered) {
+
+			wordCount++;
 
 		}
 
-		printf("\t%d\n", wordCount);
+		// used to count max digits to use...
+
+		printf("%d %s\n", wordCount, path);
 
 		// words
 
@@ -182,19 +291,22 @@ void wc(int mode, char* path){
 
 		// printf("3\n");
 
-		while (read(fd[0], buf, sizeof(buf))) {
+		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
-			//printf("the buffer contains[%d]\n", buf[0]);
-
-			if (buf[0] != 10 && buf[0] != 13 && buf[0] != 0) {
-
-				characterCount++;
-
-			}
+			characterCount = characterCount + 1;
 
 		}
 
-		printf("\t%d\n", characterCount);
+
+		while (read(fd[0], buf, sizeof(buf)) != 0) {
+
+			characterCount = characterCount + 1;
+
+		}
+
+		printf("%d %s\n", characterCount, path);
+
+		// words
 
 	}
 
