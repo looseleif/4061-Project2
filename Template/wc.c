@@ -32,7 +32,7 @@ void wc(int mode, char* path){
 	size_t Max_Path_Size = 1000; //Just a random number I picked
 	char curDir[Max_Path_Size]; //array that will represent our current directory
 
-	printf("hello1");
+	//printf("hello1");
 
 	if (path == NULL) {
 
@@ -50,7 +50,7 @@ void wc(int mode, char* path){
 	}
 	else {
 
-		printf("hello2");
+		//printf("hello2");
 
 		if (getcwd(curDir, Max_Path_Size) == NULL) //Error checking
 		{
@@ -61,9 +61,9 @@ void wc(int mode, char* path){
 		{
 			//path = curDir;
 		}
-		printf("hello3");
+		//printf("hello3");
 
-		fd[0] = open(path, O_RDONLY); // NEED ERROR HANDLE
+		fd[0] = openat(AT_FDCWD, path, O_RDONLY); // NEED ERROR HANDLE
 
 	}
 
@@ -334,7 +334,7 @@ void wc(int mode, char* path){
 
 int main(int argc, char** argv){
 	
-	printf("hello112");
+	//printf("hello112");
 
 	if(argc>2){
 		if(strcmp(argv[1], "-l") == 0) { 

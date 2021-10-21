@@ -246,12 +246,24 @@ int main(){
 			}
 			else if (wcPID == 0) //child
 			{
-				//printf("\n%s\n", commandSplit[0]);
-				char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
+				char* ABS_PATH_BUF = (char*)malloc(1000);
 				sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
-				//printf("\n%s\n", commandSplit[0]);
 				commandSplit[0] = ABS_PATH_BUF;
-				execv(commandSplit[0],commandSplit);
+
+				char* args[counter + 1];
+
+				int i;
+				for (i = 0; i < counter; i++)
+				{
+					//printf("%s ", ABS_PATH_BUF);
+					args[i] = (char*)malloc(1000);
+					strcpy(args[i], commandSplit[i]);
+					//printf("%d:%s\n", i, args[i]);
+				}
+
+				args[counter] = NULL;
+				execv(args[0], args);
+				printf("FAIL\n");
 			}
 			else //parent
 			{
