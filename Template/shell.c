@@ -21,8 +21,8 @@ int main(){
 	int redirectionType = 0;
 	int pipe = 0;
 	int file_desc;
-	//int terminal = dup(STDOUT_FILENO);
-	//int ifRedirected = 0;
+	int terminal = dup(STDOUT_FILENO);
+	int ifRedirected = 0;
 
 	//error checking for pathconf
 	errno = 0;
@@ -95,7 +95,8 @@ int main(){
 	else  //parent
 	{
 		//wait for p1, error checking
-		if(waitpid(p1, NULL, 0) < 0)
+		//if(waitpid(p1, NULL, 0) < 0)
+		if(wait(NULL) < 0)
 		{
 			perror("ERROR: failed to wait for child p1"); 
 			free(currentDirectory); 
@@ -138,7 +139,7 @@ int main(){
         		counter = counter + 1;
         		commandSplit[counter] = strtok(NULL, " \n\r");
    			}
-		   /*
+		   
 		for(int i = 0; i < counter; i++) //checking for file redirection
 		{
 			if(strcmp(commandSplit[i], ">") == 0) //if no append
@@ -149,7 +150,10 @@ int main(){
 				{
        	 				printf("Error opening the file\n");
 				}
-				dup2(file_desc, STDOUT_FILENO); //changes the output to the file
+				dup2(file_desc, 1); //changes the output to the file
+				printf("FD: %d \n", STDOUT_FILENO);
+				printf("FD: %d \n", terminal);
+				printf("FD: %d \n", file_desc);
 				ifRedirected = 1;
 			}
 			else if (strcmp(commandSplit[i], ">>") == 0) //if append
@@ -169,7 +173,7 @@ int main(){
 			commandSplit[counter - 1] = NULL; //gets rid of the file.txt in commandSplit
 			commandSplit[counter - 2] = NULL; //gets rid of the > or >> symbol in commandSplit
 		}
-		*/
+		
 		if(strcmp(commandSplit[0], "cd") == 0)
 		{
 			if(counter != 2)
@@ -205,7 +209,7 @@ int main(){
 					//printf("%s ", ABS_PATH_BUF);
 					args[i] = (char *) malloc(1000);
 					strcpy(args[i], commandSplit[i]);
-					printf("%d:%s\n", i, args[i]);
+					//printf("%d:%s\n", i, args[i]);
 				}
 
 				args[counter] = NULL;
@@ -214,13 +218,14 @@ int main(){
 				//printf("1:%s 2:%s %d\n", commandSplit[0], commandSplit[1], counter);
 				
 				//execvp(commandSplit[0],commandSplit);
-				execv(args[0],args);
+				execvp(args[0],args);
 				printf("FAIL\n");
 			}
 			else //parent
 			{
 				//wait for lsPID, error checking
-				if(waitpid(lsPID, NULL, 0) < 0) 
+				//if(waitpid(lsPID, NULL, 0) < 0) 
+				if(wait(NULL) < 0) 
 				{
 					printf("Command error\n"); 
 					free(currentDirectory);
@@ -228,13 +233,6 @@ int main(){
 					free(TEMPLATE_DIR);
 					exit(0);
 				}
-
-				/*if(ifRedirected == 1)
-				{	
-					close(file_desc);
-					dup2(terminal,1);
-					ifRedirected = 0;
-				}*/
 			}
 		}
 		else if(strcmp(commandSplit[0], "wc") == 0)
@@ -303,14 +301,13 @@ int main(){
 				}
 			}
 		}
-		/*
+
 		if(ifRedirected == 1)
 		{	
 			close(file_desc);
 			dup2(terminal,1);
-			close(terminal);
 			ifRedirected = 0;
-		}   */  
+		}
 
 		//gets current working directory & checks for error
 		if(getcwd(currentDirectory, PATH_SIZE) == NULL)

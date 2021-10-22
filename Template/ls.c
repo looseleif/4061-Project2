@@ -82,6 +82,12 @@ int main(int argc, char *argv[]){
 
 	printf("ARGC: %d \n ", argc);
 
+	//int i;
+	//for(i = 0; i < argc; i++)
+	//{
+		//printf("ARGV %d: %s \n", i, argv[i]);
+	//}
+
 	if(argc < 2){ // No -R flag and no path name
 		ls(NULL, false);
 	} else if(strcmp(argv[1], "-R") == 0) { 
