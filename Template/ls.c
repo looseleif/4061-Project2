@@ -80,7 +80,10 @@ void ls(char *path, bool recurse_flag)
 
 int main(int argc, char *argv[]){
 
-	printf("ARGC: %d \n ", argc);
+	//printf("ARGC: %d \n ", argc);
+
+	//This printf was necessary to fix a weird bug. Reference emails for context. The emoji is just there for (shits && giggles)
+	printf("😂");
 
 	//int i;
 	//for(i = 0; i < argc; i++)

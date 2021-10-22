@@ -105,7 +105,6 @@ int main(){
 		}
 
 		// Initialization should end here. Now, we must print the cwd and wait for input. While loop might be a good idea
-
 		//prints out the tag and the cwd
 		printf("\n%s%s $ ", SHELL_TAG, currentDirectory);
 
@@ -151,9 +150,9 @@ int main(){
        	 				printf("Error opening the file\n");
 				}
 				dup2(file_desc, 1); //changes the output to the file
-				printf("FD: %d \n", STDOUT_FILENO);
-				printf("FD: %d \n", terminal);
-				printf("FD: %d \n", file_desc);
+				//printf("FD: %d \n", STDOUT_FILENO);
+				//printf("FD: %d \n", terminal);
+				//printf("FD: %d \n", file_desc);
 				ifRedirected = 1;
 			}
 			else if (strcmp(commandSplit[i], ">>") == 0) //if append
@@ -168,11 +167,6 @@ int main(){
 				ifRedirected = 1;
 			}
 		}
-		if (ifRedirected == 1)
-		{
-			commandSplit[counter - 1] = NULL; //gets rid of the file.txt in commandSplit
-			commandSplit[counter - 2] = NULL; //gets rid of the > or >> symbol in commandSplit
-		}
 		
 		if(strcmp(commandSplit[0], "cd") == 0)
 		{
@@ -186,89 +180,49 @@ int main(){
 				perror("[4061-shell]: ");
 			}
 		}
-		else if(strcmp(commandSplit[0], "ls") == 0)
+		else if((strcmp(commandSplit[0], "ls") == 0) || (strcmp(commandSplit[0], "wc") == 0))
 		{
-			pid_t lsPID = fork();
-			if (lsPID < 0) //error
+			pid_t customPID = fork();
+
+			if (customPID < 0) //error
 			{
 				printf("Command error\n");
 			}
-			else if (lsPID == 0) //child
+			else if (customPID == 0) //child
 			{
-				//printf("\n%d\n", counter);
-				//char * ABS_PATH_BUF = (char*) malloc(sizeof(TEMPLATE_DIR) + sizeof(commandSplit[0]) + 1);
 				char * ABS_PATH_BUF = (char*) malloc(1000);
 				sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
 				commandSplit[0] = ABS_PATH_BUF;
 
-				char * args[counter + 1];
-
-				int i;
-				for(i = 0; i < counter; i++)
+				int j = 0;
+				while(j < counter && (strcmp(commandSplit[j], ">") != 0) && (strcmp(commandSplit[j], ">>") != 0))
 				{
-					//printf("%s ", ABS_PATH_BUF);
-					args[i] = (char *) malloc(1000);
-					strcpy(args[i], commandSplit[i]);
-					//printf("%d:%s\n", i, args[i]);
+					j++;
 				}
 
-				args[counter] = NULL;
-				//printf("\n%s\n", commandSplit[0]);
-				
-				//printf("1:%s 2:%s %d\n", commandSplit[0], commandSplit[1], counter);
-				
-				//execvp(commandSplit[0],commandSplit);
-				execvp(args[0],args);
+				char ** args = (char **) malloc(sizeof(char**) * j + 1);
+
+				int i;
+				for(i = 0; i < j; i++)
+				{
+					args[i] = (char *) malloc(100);
+					strcpy(args[i], commandSplit[i]);
+				}
+				args[j] = (char *) NULL;
+			
+				execv(args[0],args);
 				printf("FAIL\n");
+				free(currentDirectory);
+				free(buf);
+				free(TEMPLATE_DIR);
+				return 0;
 			}
 			else //parent
 			{
 				//wait for lsPID, error checking
-				//if(waitpid(lsPID, NULL, 0) < 0) 
-				if(wait(NULL) < 0) 
+				if(waitpid(customPID, NULL, 0) < 0) 
 				{
 					printf("Command error\n"); 
-					free(currentDirectory);
-					free(buf);
-					free(TEMPLATE_DIR);
-					exit(0);
-				}
-			}
-		}
-		else if(strcmp(commandSplit[0], "wc") == 0)
-		{
-			pid_t wcPID = fork();
-			if (wcPID < 0) //error
-			{
-				printf("Command error\n");
-			}
-			else if (wcPID == 0) //child
-			{
-				char* ABS_PATH_BUF = (char*)malloc(1000);
-				sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, commandSplit[0]);
-				commandSplit[0] = ABS_PATH_BUF;
-
-				char* args[counter + 1];
-
-				int i;
-				for (i = 0; i < counter; i++)
-				{
-					//printf("%s ", ABS_PATH_BUF);
-					args[i] = (char*)malloc(1000);
-					strcpy(args[i], commandSplit[i]);
-					//printf("%d:%s\n", i, args[i]);
-				}
-
-				args[counter] = NULL;
-				execv(args[0], args);
-				printf("FAIL\n");
-			}
-			else //parent
-			{
-				//wait for wcPID, error checking
-				if(waitpid(wcPID, NULL, 0) < 0) 
-				{
-					printf("Command error\n");
 					free(currentDirectory);
 					free(buf);
 					free(TEMPLATE_DIR);
@@ -286,7 +240,29 @@ int main(){
 			}
 			else if (miscPID == 0) //child
 			{
-				execvp(commandSplit[0],commandSplit);
+				int j = 0;
+				while(j < counter && (strcmp(commandSplit[j], ">") != 0) && (strcmp(commandSplit[j], ">>") != 0))
+				{
+					j++;
+				}
+
+				char ** args = (char **) malloc(sizeof(char**) * j + 1);
+
+				int i;
+				for(i = 0; i < j; i++)
+				{
+					args[i] = (char *) malloc(100);
+					strcpy(args[i], commandSplit[i]);
+				}
+				args[j] = (char *) NULL;
+			
+				execvp(args[0],args);
+				printf("FAIL\n");
+				free(currentDirectory);
+				free(buf);
+				free(TEMPLATE_DIR);
+				return 0;
+				//execvp(commandSplit[0],commandSplit);
 			}
 			else //parent
 			{
