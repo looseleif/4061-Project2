@@ -156,11 +156,12 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 			for (i = 0; i < j; i++)
 			{
 				args[i] = (char*)malloc(100);
-				printf("%d: %s\n", i, pipeSelect[0][i]);
+				//printf("%d: %s\n", i, pipeSelect[0][i]);
 				strcpy(args[i], pipeSelect[0][i]);
 			}
 			args[j] = (char*)NULL;
-
+			
+			
 			execv(args[0], args);
 			printf("FAIL\n");
 			free(ABS_PATH_BUF);
@@ -211,7 +212,7 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 				strcpy(args[i], pipeSelect[0][i]);
 			}
 			args[j] = (char*)NULL;
-
+			
 			execvp(args[0], args);
 			printf("FAIL\n");
 			free(args);
@@ -244,10 +245,11 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 	{	
 		close(file_desc);
 		dup2(terminal,1);
-		dup2(inputFD,0);
 		ifRedirected = 0;
 	}
-
+	dup2(inputFD,0);
+	//printf("WE GO HERE\n");
+	
 	return retVal;
 }
 
@@ -471,7 +473,9 @@ int main(){
 					strcpy(args[i], commandSplit[i]);
 				}
 				args[j] = (char *) NULL;
-			
+				
+				printf("GUANTLET\n");
+				
 				execv(args[0],args);
 				printf("FAIL\n");
 				free(currentDirectory);
@@ -560,8 +564,8 @@ int main(){
 			free(TEMPLATE_DIR);
 			exit(0);
 		}
-			
-		printf("%s%s $ ", SHELL_TAG, currentDirectory);   
+
+		printf("%s%s $ ", SHELL_TAG, currentDirectory); 
 		fgets(buf, MAX_COMMAND_SIZE, stdin);
 	}
 
