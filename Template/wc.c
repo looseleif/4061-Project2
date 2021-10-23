@@ -50,75 +50,28 @@ void wc(int mode, char* path){
 	}
 	else {
 
-		//printf("hello2");
-
 		if (getcwd(curDir, Max_Path_Size) == NULL) //Error checking
 		{
 			printf("CWD Error %s\n", curDir);
 			return;
 		}
-		else //if no error, sets our current path to path
-		{
-			//path = curDir;
-		}
-		//printf("hello3");
 
-		fd[0] = openat(AT_FDCWD, path, O_RDONLY); // NEED ERROR HANDLE
+		if ((fd[0] = openat(AT_FDCWD, path, O_RDONLY)) < 0) {
+
+			printf("Can't open %s\n", path);
+			return;
+
+		}; 
 
 	}
 
 	if (mode == 0) {
 
-
-		// printf("mode 0\n");
-		/*
-		if (read(fd[0], buf, sizeof(buf)) != 0) {
-
-			if ( (buf[0] != ' ') && (buf[0] != '\r') ) {
-
-				wordCount++;
-
-			}
-
-			if (buf[0] != 10 && buf[0] != 13 && buf[0] != 0) {
-
-				characterCount++;
-
-			}
-
-			prev[0] = buf[0];
-
-			while (read(fd[0], buf, sizeof(buf))) {
-
-				//printf("prev:'%d' buf:'%d'\n", prev[0], buf[0]);
-
-				if (buf[0] == '\n') {
-
-					lineCount++;
-
-				}
-
-				if ((prev[0] != ' ' && buf[0] == ' ') || ((buf[0]!=32&&buf[0]!=10&&buf[0] != 13)&&prev[0]==10)) {
-
-					wordCount++;
-
-				}
-
-				characterCount++;
-
-				prev[0] = buf[0];
-
-			}
-
-		}
-		*/
-
-
 		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
 			characterCount = characterCount + 1;
 
-			if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+			if ( buf[0] != '\t' || buf[0] != '\n' || buf[0] != ' ' || buf[0] != '\0') {
 
 				if (entered && buf[0] != '\n' && buf[0] != '\r') {
 
@@ -253,8 +206,6 @@ void wc(int mode, char* path){
 	}
 	else if (mode == 2) {
 
-		// printf("2\n");
-
 		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
 			if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
@@ -308,8 +259,6 @@ void wc(int mode, char* path){
 
 	}
 	else if (mode == 3) {
-
-		// printf("3\n");
 
 		if (read(fd[0], buf, sizeof(buf)) != 0) {
 
