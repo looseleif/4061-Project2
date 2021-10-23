@@ -26,7 +26,7 @@ void wc(int mode, char* path){
 
 	char buf[1];
 
-	//char prev[1];
+	int piped = 0;
 
 
 	size_t Max_Path_Size = 1000; //Just a random number I picked
@@ -36,16 +36,7 @@ void wc(int mode, char* path){
 
 	if (path == NULL) {
 
-		//printf("This means we must use STDIN for input\n");
-		
-		// set path equal to the piped input from STDIN
-
-
-		if (dup2(fd[0], STDIN_FILENO) < 0) {
-
-			printf("ERROR: Failed dup2...");
-
-		}
+		piped = 1;
 
 	}
 	else {
@@ -65,217 +56,437 @@ void wc(int mode, char* path){
 
 	}
 
+	if (piped) {
+
+		if (mode == 0) {
+
+			if (read(0, buf, sizeof(buf)) != 0) {
+
+				characterCount = characterCount + 1;
+
+				if (buf[0] != '\t' || buf[0] != '\n' || buf[0] != ' ' || buf[0] != '\0') {
+
+					if (entered && buf[0] != '\n' && buf[0] != '\r') {
+
+						entered = 0;
+						wordCount = wordCount + 1;
+
+					}
+
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
+				}
+				else {
+
+					entered = 1;
+
+				}
+			}
+
+			//printf("%s\n", buf);
+
+			while (read(0, buf, sizeof(buf)) != 0) {
+
+				//printf("[%s]\n", buf);
+
+				characterCount = characterCount + 1;
+
+
+				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+
+					if (entered) {
+
+						entered = 0;
+						wordCount = wordCount + 1;
+
+					}
+
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
+
+				}
+				else {
+
+					entered = 1;
+
+				}
+
+			}
+
+			if (entered) {
+
+				wordCount++;
+
+			}
+
+			// used to count max digits to use...
+
+			int list[3] = { lineCount, wordCount, characterCount };
+
+			int tempNum;
+
+			for (i = 0; i < 3; i++) {
+
+
+				tempNum = list[i];
+
+				counter = 0;
+
+				while (tempNum != 0) {
+
+					tempNum = tempNum / 10;
+					counter++;
+
+				}
+
+				if (counter > maximum) {
+
+					maximum = counter;
+
+				}
+
+			}
+
+
+			printf("%*d %*d %*d\n", maximum, lineCount, maximum, wordCount, maximum, characterCount);
+
+			// display all three col
+
+		}
+		else if (mode == 1) {
+
+			// printf("1\n");
+
+			if (read(0, buf, sizeof(buf)) != 0) {
+
+				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
+				}
+
+			}
+
+			//printf("%s\n", buf);
+
+			while (read(0, buf, sizeof(buf)) != 0) {
+
+				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
+
+				}
+
+			}
+
+			printf("%d\n", lineCount);
+
+			// lines
+
+		}
+		else if (mode == 2) {
+
+			if (read(0, buf, sizeof(buf)) != 0) {
+
+				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+
+					if (entered && buf[0] != '\n' && buf[0] != '\r') {
+
+						entered = 0;
+						wordCount = wordCount + 1;
+
+					}
+
+				}
+				else {
+
+					entered = 1;
+
+				}
+			}
+
+			while (read(0, buf, sizeof(buf)) != 0) {
+
+				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+
+					if (entered) {
+
+						entered = 0;
+						wordCount = wordCount + 1;
+
+					}
+
+				}
+				else {
+
+					entered = 1;
+
+				}
+
+			}
+
+			if (entered) {
+
+				wordCount++;
+
+			}
+
+			// used to count max digits to use...
+
+			printf("%d\n", wordCount);
+
+			// words
+
+		}
+		else if (mode == 3) {
+
+			if (read(0, buf, sizeof(buf)) != 0) {
+
+				characterCount = characterCount + 1;
+
+			}
+
+
+			while (read(0, buf, sizeof(buf)) != 0) {
+
+				characterCount = characterCount + 1;
+
+			}
+
+			printf("%d\n", characterCount);
+
+			// words
+
+		}
+	}
+	else {
+
 	if (mode == 0) {
 
-		if (read(fd[0], buf, sizeof(buf)) != 0) {
+			if (read(fd[0], buf, sizeof(buf)) != 0) {
 
-			characterCount = characterCount + 1;
+				characterCount = characterCount + 1;
 
-			if ( buf[0] != '\t' || buf[0] != '\n' || buf[0] != ' ' || buf[0] != '\0') {
+				if (buf[0] != '\t' || buf[0] != '\n' || buf[0] != ' ' || buf[0] != '\0') {
 
-				if (entered && buf[0] != '\n' && buf[0] != '\r') {
+					if (entered && buf[0] != '\n' && buf[0] != '\r') {
 
-					entered = 0;
-					wordCount = wordCount + 1;
+						entered = 0;
+						wordCount = wordCount + 1;
 
+					}
+
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
 				}
+				else {
 
-				if (buf[0] == '\0' || buf[0] == '\n') {
-
-					lineCount = lineCount + 1;
-
-				}
-			}
-			else {
-
-				entered = 1;
-
-			}
-		}
-
-		//printf("%s\n", buf);
-
-		while (read(fd[0], buf, sizeof(buf)) != 0) {
-
-			//printf("[%s]\n", buf);
-
-			characterCount = characterCount + 1;
-
-
-			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
-
-				if (entered) {
-
-					entered = 0;
-					wordCount = wordCount + 1;
-
-				}
-
-				if (buf[0] == '\0' || buf[0] == '\n') {
-
-					lineCount = lineCount + 1;
-
-				}
-
-			}
-			else {
-
-				entered = 1;
-
-			}
-
-		}
-
-		if (entered) {
-
-			wordCount++;
-
-		}
-
-		// used to count max digits to use...
-
-		int list[3] = {lineCount, wordCount, characterCount};
-
-		int tempNum;
-
-		for (i = 0; i < 3; i++) {
-
-
-			tempNum = list[i];
-
-			counter = 0;
-
-			while (tempNum != 0) {
-
-				tempNum = tempNum / 10;
-				counter++;
-
-			}
-			
-			if (counter > maximum) {
-
-				maximum = counter;
-
-			}
-
-		}
-
-
-		printf("%*d %*d %*d %s\n", maximum, lineCount, maximum, wordCount, maximum, characterCount, path);
-
-		// display all three col
-
-	}
-	else if (mode == 1) {
-
-		// printf("1\n");
-
-		if (read(fd[0], buf, sizeof(buf)) != 0) {
-
-			if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
-
-				if (buf[0] == '\0' || buf[0] == '\n') {
-
-					lineCount = lineCount + 1;
+					entered = 1;
 
 				}
 			}
 
-		}
+			//printf("%s\n", buf);
 
-		//printf("%s\n", buf);
+			while (read(fd[0], buf, sizeof(buf)) != 0) {
 
-		while (read(fd[0], buf, sizeof(buf)) != 0) {
+				//printf("[%s]\n", buf);
 
-			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+				characterCount = characterCount + 1;
 
-				if (buf[0] == '\0' || buf[0] == '\n') {
 
-					lineCount = lineCount + 1;
+				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+
+					if (entered) {
+
+						entered = 0;
+						wordCount = wordCount + 1;
+
+					}
+
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
+
+				}
+				else {
+
+					entered = 1;
 
 				}
 
 			}
 
-		}
+			if (entered) {
 
-		printf("%d %s\n", lineCount, path);
+				wordCount++;
 
-		// lines
+			}
 
-	}
-	else if (mode == 2) {
+			// used to count max digits to use...
 
-		if (read(fd[0], buf, sizeof(buf)) != 0) {
+			int list[3] = { lineCount, wordCount, characterCount };
 
-			if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+			int tempNum;
 
-				if (entered && buf[0] != '\n' && buf[0] != '\r') {
+			for (i = 0; i < 3; i++) {
 
-					entered = 0;
-					wordCount = wordCount + 1;
+
+				tempNum = list[i];
+
+				counter = 0;
+
+				while (tempNum != 0) {
+
+					tempNum = tempNum / 10;
+					counter++;
+
+				}
+
+				if (counter > maximum) {
+
+					maximum = counter;
 
 				}
 
 			}
-			else {
 
-				entered = 1;
+
+			printf("%*d %*d %*d %s\n", maximum, lineCount, maximum, wordCount, maximum, characterCount, path);
+
+			// display all three col
+
+		}
+		else if (mode == 1) {
+
+			// printf("1\n");
+
+			if (read(fd[0], buf, sizeof(buf)) != 0) {
+
+				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
+				}
 
 			}
-		}
 
-		while (read(fd[0], buf, sizeof(buf)) != 0) {
+			//printf("%s\n", buf);
 
-			if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+			while (read(fd[0], buf, sizeof(buf)) != 0) {
 
-				if (entered) {
+				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
-					entered = 0;
-					wordCount = wordCount + 1;
+					if (buf[0] == '\0' || buf[0] == '\n') {
+
+						lineCount = lineCount + 1;
+
+					}
 
 				}
 
 			}
-			else {
 
-				entered = 1;
+			printf("%d %s\n", lineCount, path);
+
+			// lines
+
+		}
+		else if (mode == 2) {
+
+			if (read(fd[0], buf, sizeof(buf)) != 0) {
+
+				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
+
+					if (entered && buf[0] != '\n' && buf[0] != '\r') {
+
+						entered = 0;
+						wordCount = wordCount + 1;
+
+					}
+
+				}
+				else {
+
+					entered = 1;
+
+				}
+			}
+
+			while (read(fd[0], buf, sizeof(buf)) != 0) {
+
+				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
+
+					if (entered) {
+
+						entered = 0;
+						wordCount = wordCount + 1;
+
+					}
+
+				}
+				else {
+
+					entered = 1;
+
+				}
 
 			}
 
-		}
+			if (entered) {
 
-		if (entered) {
+				wordCount++;
 
-			wordCount++;
+			}
 
-		}
+			// used to count max digits to use...
 
-		// used to count max digits to use...
+			printf("%d %s\n", wordCount, path);
 
-		printf("%d %s\n", wordCount, path);
-
-		// words
-
-	}
-	else if (mode == 3) {
-
-		if (read(fd[0], buf, sizeof(buf)) != 0) {
-
-			characterCount = characterCount + 1;
+			// words
 
 		}
+		else if (mode == 3) {
+
+			if (read(fd[0], buf, sizeof(buf)) != 0) {
+
+				characterCount = characterCount + 1;
+
+			}
 
 
-		while (read(fd[0], buf, sizeof(buf)) != 0) {
+			while (read(fd[0], buf, sizeof(buf)) != 0) {
 
-			characterCount = characterCount + 1;
+				characterCount = characterCount + 1;
+
+			}
+
+			printf("%d %s\n", characterCount, path);
+
+			// words
 
 		}
-
-		printf("%d %s\n", characterCount, path);
-
-		// words
 
 	}
 

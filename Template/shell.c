@@ -52,7 +52,12 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 			{
  				printf("Error opening the file\n");
 			}
-			dup2(file_desc, 1); //changes the output to the file
+			 //changes the output to the file
+			if (dup2(file_desc, 1) < 0) {
+
+				fprintf(stderr, "ERROR: Failed dup2... fd: \n");
+
+			}
 			ifRedirected = 1;
 		}
 		else if (strcmp(outPipe[i], ">>") == 0) //if append
@@ -62,7 +67,12 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 			{
  				printf("Error opening the file\n");
 			}
-			dup2(file_desc, STDOUT_FILENO); //changes the output to the file
+			 //changes the output to the file
+			if (dup2(file_desc, STDOUT_FILENO) < 0) {
+
+				fprintf(stderr, "ERROR: Failed dup2... fd:\n");
+
+			}
 			ifRedirected = 1;
 		}
 	}
@@ -91,9 +101,10 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 	}
 	else if (pipePID > 0) { // parent
 
-		dup2(fd[0], STDIN_FILENO);
-		close(fd[0]);
-		close(fd[1]);
+		//wait(NULL);
+
+		//close(fd[0]);
+		//close(fd[1]);
 
 		pipeSelect[0] = outPipe;
 		start = Index + 1;
@@ -102,9 +113,13 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 	}
 	else { //child INPUT
 
-		dup2(fd[1], STDOUT_FILENO);
-		close(fd[0]);
-		close(fd[1]);
+		if (dup2(fd[1], STDOUT_FILENO) < 0) {
+
+			fprintf(stderr, "ERROR: Failed dup2... fd:\n");
+
+		}
+		//close(fd[0]);
+		//close(fd[1]);
 
 		pipeSelect[0] = inPipe;
 		start = 0;
@@ -144,6 +159,21 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 			sprintf(ABS_PATH_BUF, "%s/%s", TEMPLATE_DIR, pipeSelect[0][0]);
 			pipeSelect[0][0] = ABS_PATH_BUF;
 
+
+
+			if (c2PID == 0) {
+
+				if (dup2(fd[0], STDIN_FILENO) < 0) {
+
+					fprintf(stderr, "ERROR: Failed dup2... fd: \n");
+
+				}
+
+				close(fd[0]);
+				close(fd[1]);
+
+			}
+
 			int j = 0;
 			while (j < (end - start) && (strcmp(pipeSelect[0][j], ">") != 0) && (strcmp(pipeSelect[0][j], ">>") != 0))
 			{
@@ -170,6 +200,10 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 		}
 		else //parent
 		{
+
+			close(fd[0]);
+			close(fd[1]);
+
 			//wait for lsPID, error checking
 			if (waitpid(pipePID, NULL, 0) < 0)
 			{
@@ -190,6 +224,7 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 		if(pipePID > 0) //SUPER PARENT
 		{
 			c2PID = fork();
+
 			if (c2PID < 0) //error
 			{
 			printf("Command error\n");
@@ -201,6 +236,19 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 			while (j < (end - start) && (strcmp(pipeSelect[0][j], ">") != 0) && (strcmp(pipeSelect[0][j], ">>") != 0))
 			{
 				j++;
+			}
+
+			if (c2PID == 0) {
+
+				if (dup2(fd[0], STDIN_FILENO) < 0) {
+
+					fprintf(stderr, "ERROR: Failed dup2... fd: \n");
+
+				}
+
+				close(fd[0]);
+				close(fd[1]);
+
 			}
 
 			char** args = (char**)malloc(sizeof(char**) * j + 1);
@@ -221,6 +269,10 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 		}
 		else //parent
 		{
+			
+			close(fd[0]);
+			close(fd[1]);
+
 			if (waitpid(pipePID, NULL, 0) < 0)
 			{
 				printf("Command error\n");
@@ -234,20 +286,39 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 			}
 		}
 	}
+
 	
+
+	if (dup2(terminal, 1) < 0) {
+
+		fprintf(stderr, "ERROR: Failed dup2... fd:\n");
+
+	}
+
+
+	if (dup2(inputFD, 0) < 0) {
+
+		fprintf(stderr, "ERROR: Failed dup2... fd: \n");
+
+	}
+	
+
+	if(ifRedirected == 1)
+	{	
+		
+		close(file_desc);
+		ifRedirected = 0;
+
+	}
+
 	free(inPipe);
 	free(outPipe);
 	free(pipeSelect);
 	close(fd[0]);
 	close(fd[1]);
 
-	if(ifRedirected == 1)
-	{	
-		close(file_desc);
-		dup2(terminal,1);
-		ifRedirected = 0;
-	}
-	dup2(inputFD,0);
+
+	
 	//printf("WE GO HERE\n");
 	
 	return retVal;
