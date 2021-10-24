@@ -1,5 +1,5 @@
 /*test machine: CSELAB_machine_name
-* date: 10/04/21
+* date: 10/23/21
 * name: Michael Johnson, Chase Anderson, Emir Sahbegovic
 * x500: Joh18255, And08479, Sahbe001
 */
@@ -7,9 +7,9 @@
 
 Purpose of the Program:
 
-	This program is capable of executing multiple processes either in sequential DFS order, or 
-	in parallel using a given input file denoting [Number of Command Nodes, Each Nodes Command, and 
-	the Source-->Destination Edge Descriptors]
+	This program has the purpose of implementing a shell for use of multiple commands. Extra features include the use of output rediections into files,
+	as well as using pipes to take the output of one program and place it as the input to another program. The feature of piping and redirection in the same
+	command is also implemented. This shell will also work to implement system bin commands (e.g. pwd).
 
 How to Compile the Program:
 
@@ -18,20 +18,23 @@ How to Compile the Program:
 
 What Our Program Does:
 
-	Our program will output the given commands and the process's ID and process's parent ID to a seperate output file. These commands will 
-	be sorted by the order determined by depth first search. Our program will even 
-	print the process id next to each executed command in the output file. 
+	Our program will take text input and run the shell commands required of it. Given a command was faulty or a file not provided, the system will provide the
+	output error message "Command Error". Aligned with the given purpose, this program will output to the systems standard output or a given file based on the
+	provided input. Three embeded commands (cd, ls, wc) not including exit work to change your working directory, list the files in the current 
+	working directory, and list input text information respectively.
 
 External Assumptions:
 
-	1. Commands will follow system call file path and file label standards. (e.g. /bin/ls -l)
+	1. Command input will follow suit of typical linux shell command inputs.
 
-	2. User will explicitly use "-p" as the parallel flag, this can be before 
-	   or after the input text filename. 
+	2. Only a single pipe will be used in command execution.
 
-	3. The input text file path will be explicity defined from its nearest common directory.
+	3. Command argument count will not exceed 50 entries.
 
-		(e.g. ./depGraph -p ../Testcases/in.txt OR ./depGraph ../Testcases/in.txt -p)
+	4. Command arguments themselves will not exceed 100 characters.
+
+	5. In mentioning with TA, the character resulting from a printf statement was necessary to prevent a bug
+	   that could not be solved bt 
 
 Our Team:
 
@@ -41,6 +44,6 @@ Our Team:
 
 Our Contributions: 
 	
-	Michael - DFS Algorithm & README
-	Chase - Input File Decomposition & Process Graph
-	Emir - File Generation, Error Handling, AddEdge
+	Michael - ls.c / redirection / commenting
+	Chase - wc.c / piping / README
+	Emir - cd.c / shell / exit
