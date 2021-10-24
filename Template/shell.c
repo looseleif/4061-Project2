@@ -23,19 +23,6 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 
 	int i;
 
-	if (dup2(terminal, 1) < 0) {
-
-		fprintf(stderr, "ERROR: Failed dup2... fd:\n");
-
-	}
-
-
-	if (dup2(inputFD, 0) < 0) {
-
-		fprintf(stderr, "ERROR: Failed dup2... fd: \n");
-
-	}
-
 	//fill inPipe
 	for (i = 0; i < Index; i++) {
 
