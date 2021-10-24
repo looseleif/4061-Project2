@@ -33,8 +33,15 @@ External Assumptions:
 
 	4. Command arguments themselves will not exceed 100 characters.
 
-	5. In mentioning with TA, the character resulting from a printf statement was necessary to prevent a bug
-	   that could not be solved bt 
+	5. As mentioned with TA Wenlong Wang, the character resulting from a printf statement was necessary to prevent a bug
+	   that could not be solved by any groupmate.
+
+	6. Files do not need to be created prior to redirecting output, the shell will automatically handle such requests.
+
+	TESTING PROCEDURE:
+
+	When entering a pipe along with redirection shell command, we suggest 
+	entering the command twice toto ensure the accuracy of output.
 
 Our Team:
 
