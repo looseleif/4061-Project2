@@ -672,8 +672,7 @@ int main(){
 			}
 		
 		}
-		
-		//NEEDS CHECKING
+		//for pipeProcess to not execute main code
 		else 
 		{
 			isPiping = 0;
