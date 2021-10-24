@@ -45,7 +45,6 @@ void ls(char *path, bool recurse_flag)
 	
    	while ((directoryPointer = readdir(mydir)) != NULL) 
 	{
-		//printf("D_TYPE: %d\n", directoryPointer->d_type);
 		if(excludePeriods < 2) //checking for the undesireable outputs
 		{
 			excludePeriods++;
@@ -56,8 +55,6 @@ void ls(char *path, bool recurse_flag)
          		sprintf(recursiveDirectoryStorage[currentDirStorInt], "%s/%s", path, directoryPointer->d_name); //appends the path into the array
          		currentDirStorInt++;
 			printf(" %s ", directoryPointer->d_name);
-			//ls(recursiveDirectoryStorage, true); //recurse.io
-			//printf("Back in directory: %s\n", path); //makes the output easier to read
       		}
       		else //Outputs all file names
 		{
@@ -69,7 +66,6 @@ void ls(char *path, bool recurse_flag)
 		
 	for (int i = 0; i < currentDirStorInt; i++)
 	{
-		//printf("%s: \n", recursiveDirectoryStorage[i]);
 		ls(recursiveDirectoryStorage[i], true);
 
 	}
@@ -80,16 +76,9 @@ void ls(char *path, bool recurse_flag)
 
 int main(int argc, char *argv[]){
 
-	//printf("ARGC: %d \n ", argc);
-
 	//This printf was necessary to fix a weird bug. Reference emails for context. The emoji is just there for (shits && giggles)
 	printf("😂");
 
-	//int i;
-	//for(i = 0; i < argc; i++)
-	//{
-		//printf("ARGV %d: %s \n", i, argv[i]);
-	//}
 
 	if(argc < 2){ // No -R flag and no path name
 		ls(NULL, false);
