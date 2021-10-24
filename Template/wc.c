@@ -24,15 +24,19 @@ void wc(int mode, char* path){
 	int entered = 0;
 	int start = 1;
 
+	// using buf size of 1 allows us to simply scan through each and every character
+	// present in the input data
+
 	char buf[1];
 
 	int piped = 0;
 
+	int readReturn = 0;
 
-	size_t Max_Path_Size = 1000; //Just a random number I picked
-	char curDir[Max_Path_Size]; //array that will represent our current directory
 
-	//printf("hello1");
+	size_t Max_Path_Size = 1000; // used for maximum case entries, fault tolerance
+
+	char curDir[Max_Path_Size]; // array that will represent our current directory
 
 	if (path == NULL) {
 
@@ -52,15 +56,30 @@ void wc(int mode, char* path){
 			printf("Can't open %s\n", path);
 			return;
 
-		}; 
+		}
 
 	}
 
+	// in both sub cases (pipe and nonpipe) if statement is used
+	// to check for initial case where first character may or may not 
+	// be a valid word character
+
+	// then while loops are used to iterate throughout the rest of contents.
+	// error checking included for read
+
+	// comments will be explained in the nonpipe version not the pipe version
+	// due to the similarity
+
 	if (piped) {
+
+		// inside of the pipe section, we are using STDIN_FILENO as our fd
+		// this is to take in pipe access from what could otherwise be defined
 
 		if (mode == 0) {
 
-			if (read(0, buf, sizeof(buf)) != 0) {
+			readReturn = read(0, buf, sizeof(buf));
+
+			if (readReturn > 0) {
 
 				characterCount = characterCount + 1;
 
@@ -86,11 +105,14 @@ void wc(int mode, char* path){
 				}
 			}
 
-			//printf("%s\n", buf);
+			if (readReturn < 0) {
 
-			while (read(0, buf, sizeof(buf)) != 0) {
+				fprintf(stderr, "Command Error\n");
+				return;
 
-				//printf("[%s]\n", buf);
+			}
+
+			while (readReturn > 0) {
 
 				characterCount = characterCount + 1;
 
@@ -117,6 +139,15 @@ void wc(int mode, char* path){
 
 				}
 
+				readReturn = read(0, buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
+
 			}
 
 			if (entered) {
@@ -125,7 +156,7 @@ void wc(int mode, char* path){
 
 			}
 
-			// used to count max digits to use...
+			// used to count max digits to use when displaying...
 
 			int list[3] = { lineCount, wordCount, characterCount };
 
@@ -161,9 +192,9 @@ void wc(int mode, char* path){
 		}
 		else if (mode == 1) {
 
-			// printf("1\n");
+			readReturn = read(0, buf, sizeof(buf));
 
-			if (read(0, buf, sizeof(buf)) != 0) {
+			if (readReturn > 0) {
 
 				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
 
@@ -176,9 +207,16 @@ void wc(int mode, char* path){
 
 			}
 
-			//printf("%s\n", buf);
+			if (readReturn < 0) {
 
-			while (read(0, buf, sizeof(buf)) != 0) {
+				fprintf(stderr, "Command Error\n");
+				return;
+
+			}
+
+			readReturn = read(0, buf, sizeof(buf));
+
+			while (readReturn > 0) {
 
 				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
@@ -189,6 +227,15 @@ void wc(int mode, char* path){
 					}
 
 				}
+
+				readReturn = read(0, buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
 
 			}
 
@@ -199,7 +246,9 @@ void wc(int mode, char* path){
 		}
 		else if (mode == 2) {
 
-			if (read(0, buf, sizeof(buf)) != 0) {
+			readReturn = read(0, buf, sizeof(buf));
+
+			if (readReturn > 0) {
 
 				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
 
@@ -218,7 +267,16 @@ void wc(int mode, char* path){
 				}
 			}
 
-			while (read(0, buf, sizeof(buf)) != 0) {
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
+
+			}
+
+			readReturn = read(0, buf, sizeof(buf));
+
+			while (readReturn > 0) {
 
 				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
@@ -236,6 +294,15 @@ void wc(int mode, char* path){
 
 				}
 
+				readReturn = read(0, buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
+
 			}
 
 			if (entered) {
@@ -244,8 +311,6 @@ void wc(int mode, char* path){
 
 			}
 
-			// used to count max digits to use...
-
 			printf("%d\n", wordCount);
 
 			// words
@@ -253,22 +318,41 @@ void wc(int mode, char* path){
 		}
 		else if (mode == 3) {
 
-			if (read(0, buf, sizeof(buf)) != 0) {
+			readReturn = read(0, buf, sizeof(buf));
+			
+			if (readReturn > 0) {
 
 				characterCount = characterCount + 1;
 
 			}
 
+			if (readReturn < 0) {
 
-			while (read(0, buf, sizeof(buf)) != 0) {
+				fprintf(stderr, "Command Error\n");
+				return;
+
+			}
+
+			readReturn = read(0, buf, sizeof(buf));
+
+			while (readReturn > 0) {
 
 				characterCount = characterCount + 1;
+
+				readReturn = read(0, buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
 
 			}
 
 			printf("%d\n", characterCount);
 
-			// words
+			// character
 
 		}
 	}
@@ -276,9 +360,19 @@ void wc(int mode, char* path){
 
 	if (mode == 0) {
 
-			if (read(fd[0], buf, sizeof(buf)) != 0) {
+		// access read return number for use with processing and error checking
+					
+					// read will fill buf with a single character	
+				
+		readReturn = read(fd[0], buf, sizeof(buf));
+
+			if (readReturn > 0) {
+
+				// always increment character, given present for first character
 
 				characterCount = characterCount + 1;
+
+				// checking for new word contents given something is present as the first character
 
 				if (buf[0] != '\t' || buf[0] != '\n' || buf[0] != ' ' || buf[0] != '\0') {
 
@@ -289,6 +383,8 @@ void wc(int mode, char* path){
 
 					}
 
+					// checking for new line contents given something is present as the first character
+
 					if (buf[0] == '\0' || buf[0] == '\n') {
 
 						lineCount = lineCount + 1;
@@ -297,19 +393,34 @@ void wc(int mode, char* path){
 				}
 				else {
 
+					// this means that the buf has entered an actual 
+					// character signaling the entrance of a word
+
 					entered = 1;
 
 				}
 			}
 
-			//printf("%s\n", buf);
+			// error check for failed read
 
-			while (read(fd[0], buf, sizeof(buf)) != 0) {
+			if (readReturn < 0) {
 
-				//printf("[%s]\n", buf);
+				fprintf(stderr, "Command Error\n");
+				return;
+
+			}
+
+			readReturn = read(fd[0], buf, sizeof(buf));
+
+			// this loop will read through the file contents until a fail or nothing is read
+
+			while (readReturn > 0) {
+
+				// always increment characterCount
 
 				characterCount = characterCount + 1;
 
+				// special cases for checking valid word
 
 				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
@@ -329,9 +440,20 @@ void wc(int mode, char* path){
 				}
 				else {
 
+					// same idea as before, given none of aforementioed character found, enter a word
+
 					entered = 1;
 
 				}
+
+				readReturn = read(fd[0], buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
 
 			}
 
@@ -348,7 +470,6 @@ void wc(int mode, char* path){
 			int tempNum;
 
 			for (i = 0; i < 3; i++) {
-
 
 				tempNum = list[i];
 
@@ -375,11 +496,14 @@ void wc(int mode, char* path){
 			// display all three col
 
 		}
+
+		// remaining modes employ similar tactics to what is found in mode 1
+
 		else if (mode == 1) {
 
-			// printf("1\n");
+			readReturn = read(fd[0], buf, sizeof(buf));
 
-			if (read(fd[0], buf, sizeof(buf)) != 0) {
+			if (readReturn > 0) {
 
 				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
 
@@ -392,9 +516,16 @@ void wc(int mode, char* path){
 
 			}
 
-			//printf("%s\n", buf);
+			if (readReturn < 0) {
 
-			while (read(fd[0], buf, sizeof(buf)) != 0) {
+				fprintf(stderr, "Command Error\n");
+				return;
+
+			}
+
+			readReturn = read(fd[0], buf, sizeof(buf));
+
+			while (readReturn > 0) {
 
 				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
@@ -406,6 +537,15 @@ void wc(int mode, char* path){
 
 				}
 
+				readReturn = read(fd[0], buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
+
 			}
 
 			printf("%d %s\n", lineCount, path);
@@ -415,7 +555,9 @@ void wc(int mode, char* path){
 		}
 		else if (mode == 2) {
 
-			if (read(fd[0], buf, sizeof(buf)) != 0) {
+			readReturn = read(fd[0], buf, sizeof(buf));
+			
+			if (readReturn > 0) {
 
 				if (buf[0] != ' ' || buf[0] != '\t' || buf[0] != '\n' || buf[0] != '\0') {
 
@@ -434,7 +576,16 @@ void wc(int mode, char* path){
 				}
 			}
 
-			while (read(fd[0], buf, sizeof(buf)) != 0) {
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
+
+			}
+
+			readReturn = read(fd[0], buf, sizeof(buf));
+
+			while (readReturn > 0) {
 
 				if (buf[0] == ' ' || buf[0] == '\t' || buf[0] == '\n' || buf[0] == '\0' || buf[0] == '\r') {
 
@@ -452,6 +603,15 @@ void wc(int mode, char* path){
 
 				}
 
+				readReturn = read(fd[0], buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
+
 			}
 
 			if (entered) {
@@ -460,8 +620,6 @@ void wc(int mode, char* path){
 
 			}
 
-			// used to count max digits to use...
-
 			printf("%d %s\n", wordCount, path);
 
 			// words
@@ -469,22 +627,41 @@ void wc(int mode, char* path){
 		}
 		else if (mode == 3) {
 
-			if (read(fd[0], buf, sizeof(buf)) != 0) {
+			readReturn = read(fd[0], buf, sizeof(buf));
+			
+			if (readReturn > 0) {
 
 				characterCount = characterCount + 1;
 
 			}
 
+			if (readReturn < 0) {
 
-			while (read(fd[0], buf, sizeof(buf)) != 0) {
+				fprintf(stderr, "Command Error\n");
+				return;
+
+			}
+
+			readReturn = read(fd[0], buf, sizeof(buf));
+
+			while (readReturn > 0) {
 
 				characterCount = characterCount + 1;
+
+				readReturn = read(fd[0], buf, sizeof(buf));
+
+			}
+
+			if (readReturn < 0) {
+
+				fprintf(stderr, "Command Error\n");
+				return;
 
 			}
 
 			printf("%d %s\n", characterCount, path);
 
-			// words
+			// characters
 
 		}
 
@@ -493,8 +670,6 @@ void wc(int mode, char* path){
 }
 
 int main(int argc, char** argv){
-	
-	//printf("hello112");
 
 	if(argc>2){
 		if(strcmp(argv[1], "-l") == 0) { 
