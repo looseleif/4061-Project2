@@ -340,6 +340,21 @@ int thePipeProcess(char* commands[50], int Index, int cmdCounter, char * TEMPLAT
 	}
 	
 	//Free everything
+
+	for (i = 0; i < Index; i++)
+	{
+		
+		free(inPipe[i]);
+
+	}
+
+	for (i = 0, j = Index + 1; j < cmdCounter; j++, i++)
+	{
+
+		free(outPipe[i]);
+
+	}
+
 	free(inPipe);
 	free(outPipe);
 	free(pipeSelect);

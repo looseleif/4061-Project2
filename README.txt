@@ -38,11 +38,6 @@ External Assumptions:
 
 	6. Files do not need to be created prior to redirecting output, the shell will automatically handle such requests.
 
-	TESTING PROCEDURE:
-
-	When entering a pipe along with redirection shell command, we suggest 
-	entering the command twice toto ensure the accuracy of output.
-
 Our Team:
 
 	Michael Johnson - Joh18255
